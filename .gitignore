@@ -6,8 +6,18 @@
 # ides
 .idea
 .vscode
+/.zed/
+.zed
+pyproject.toml
 
 env/
 venv/
 ENV/
 .venv/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+#Python
+__pycache__/
