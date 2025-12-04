@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.Python
+env/
+venv/
+ENV/
+.venv/
+pip-log.txt
+pyproject.toml
+/.zed/
+
+# VSCode
+.vscode
+
+# PyCharm
+.idea/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Logs and local output
+*.log
+
+# Uploaded files directory
+uploads/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# PDF2Image cache
+*.ppm
+
+.env
+
+# test files
+*test_result_*.csv
+.zed
+pyproject.toml
+
