@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+.auth_container.forgot_password_container {
+    .content-wrapper {
+        .register {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.auth_container {
+    background-color: #0A0A0A;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    * {
+        font-family: "DM Sans", sans-serif;
+    }
+
+    .auth_wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 84vh;
+        width: 100%;
+    }
+
+    .logo {
+        width: 64px;
+        height: auto;
+    }
+    h1 {
+        font-size: 36px;
+        margin-top: 16px;
+        color: #FFFFFF;
+        font-weight: 500;
+    }
+    .content-wrapper {
+        margin-top: 40px;
+        background-color: #1C1C1C;
+        border-radius: 24px;
+        padding: 24px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 420px;
+        width: 100%;
+
+        ._notification {
+            color: #fff;
+            background-color: #0a0a0a;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        ._error {
+            color: #f56f6f;
+            margin: 10px 0px 0px 0px;
+            text-align: center;
+        }
+
+        .field_wrap {
+            background-color: #1c1c1c;
+            width: 100%;
+            input {
+                width: 100%;
+                height: 48px;
+                border: none;
+                border-radius: 8px;
+                padding: 16px;
+                color: #FFFFFF;
+                font-size: 16px;
+                outline: none;
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                background-color: transparent;
+
+                &::placeholder {
+                    color: #7B7B7B;
+                }
+                &:focus {
+                    border-color: #FFFFFF;
+                    color: #FFFFFF;
+                }
+            }
+
+            input:-webkit-autofill {
+                background-color: transparent !important;
+                color: #FFFFFF;
+            }
+
+            &:not(:first-child) {
+                margin-top: 16px;
+            }
+        }
+        .inline-fields {
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 12px;
+
+            .field_wrap {
+                margin-top: 0px;
+            }
+        }
+        .login_button:hover {
+            background: #DFDDDD;
+        }
+        .login_button {
+            font-size: 18px;
+            background-color: #FFFFFF;
+            color: #111111;
+            width: 100%;
+            padding: 12px 12px;
+            margin-top: 18px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            ._loading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;color: #111;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 24px;
+                letter-spacing: -0.36px;
+
+                img {
+                    animation: loading 1s  infinite linear;
+                    width: 19px;
+                    aspect-ratio: 1/1;
+                }
+
+                @keyframes loading {
+                    0% {
+                        transform: rotate(0);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            }
+        }
+        .forgot_password {
+            color: rgba(255, 255, 255, 0.60);
+            text-align: center;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            margin-top: 10px;
+        }
+        .forgot_password:hover {
+            color: #fff;
+        }
+        .register {
+            font-size: 16px;
+            color: rgba(#FFFFFF, 0.6);
+            margin: 10px 0px;
+            text-decoration: none;
+
+            a:hover {
+                color: #FFFFFF;
+            }
+        }
+        .divider {
+            width: 100%;
+            color: #FFFFFF;
+            position: relative;
+            display: grid;
+            grid-template-columns: 40% auto 40%;
+            align-items: center;
+            column-gap: 10px;
+            margin-top: 10px;
+
+            span {
+                margin: 0 auto;
+                text-transform: uppercase;
+            }
+            ._before {
+                height: 1px;
+                background-color: #ECECEC;
+            }
+            ._after {
+                height: 1px;
+                background-color: #ECECEC;
+            }
+        }
+        .socials {
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 8px;
+            margin-top: 18px;
+            width: 100%;
+
+            .social_button:hover {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            .social_button {
+                border: 1px solid rgba(#FFFFFF, 0.15);
+                border-radius: 8px;
+                background-color: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 14px 20px;
+                color: #FFFFFF;
+                cursor: pointer;
+
+                img {
+                    width: 22px;
+                    height: 22px;
+                }
+
+                span {
+                    margin-left: 18px;
+                    font-size: 16px;
+                }
+            }
+        }
+        .policy {
+            margin: 18px 0px 0px 0px;
+            color: rgba(#FFFFFF, 0.6);
+            font-size: 16px;
+
+            a {
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+    }
+} 

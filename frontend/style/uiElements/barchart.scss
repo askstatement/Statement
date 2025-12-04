@@ -1,0 +1,140 @@
+.d3_container.barchart {
+  position: relative;
+  width: 100%;
+  background: #1a1a1a; // dark background
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  svg {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .d3_data_details {
+    display: flex;
+    padding: 8px 10px;
+    position: absolute;
+    top: 20px;
+    justify-content: space-between;
+    width: calc(100% - 40px);
+
+    ._wrap {
+      display: flex;
+      align-items: center;
+
+      ._logo {
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+      }
+
+      .data_display {
+        h2 {
+          color: #ffffff;
+          font-size: 20px;
+          margin: 0;
+          display: flex;
+          align-items: center;
+
+          span {
+            margin-left: 8px;
+            color: #00cb7d;
+            font-weight: 500;
+          }
+        }
+
+        p {
+          margin: 2px 0 0 0;
+          font-size: 14px;
+          color: #a0a0a0;
+          display: flex;
+          align-items: center;
+
+          span {
+            margin-right: 6px;
+            color: #00cb7d;
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 12px;
+              height: 12px;
+              margin-right: 2px;
+            }
+          }
+        }
+      }
+    }
+
+    .d3_data_switch {
+      cursor: no-drop;
+      opacity: 0.6;
+      border: 1px solid rgba(232, 232, 226, 0.05);
+      display: none;
+      span {
+        cursor: no-drop;
+        color: #a0a0a0;
+        font-size: 13px;
+        margin-left: 8px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: background 0.2s, color 0.2s;
+
+        &._active {
+          background: #2e2e2e;
+          color: #ffffff;
+        }
+
+        &:hover {
+          background: #2e2e2e;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .d3_xaxis text,
+  .d3_yaxis text {
+    display: none;
+  }
+
+  .d3_y_grid,
+  .d3_x_grid {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+
+  rect {
+    rx: 8px;
+    ry: 8px;
+    transition: fill 0.2s, opacity 0.2s;
+    fill: rgba(0, 203, 125, 0.24);
+    stroke: rgba(0, 203, 125, 0.16);
+    stroke-width: 2;
+
+    &:hover {
+      fill: rgba(0, 203, 125, 0.4);
+      stroke: #00cb7d;
+      opacity: 1;
+    }
+  }
+
+  .tooltip {
+    border-radius: 99999px;
+    border: 1px solid #00cb7d;
+    padding: 4px 8px;
+    height: fit-content;
+    backdrop-filter: blur(1px);
+    p {
+      color: #989898;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 12px; /* 150% */
+      letter-spacing: 0.075px;
+      margin-top: 2px;
+      margin-bottom: 0px;
+    }
+  }
+}

@@ -1,0 +1,259 @@
+.news_container {
+    overflow-y: scroll; /* still allows scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scroll-behavior: smooth;
+    
+    .news_title {
+        margin-top: 32px;
+        padding: 16px;
+        border-bottom: 1px solid #222;
+
+        h1 {
+            color: #FFF;
+            font-size: 28px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 34px;
+            letter-spacing: -0.56px;
+            margin-bottom: 6px;
+            }
+
+        p {
+            color: rgba(255, 255, 255, 0.60);
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: -0.16px;
+        }
+    }
+
+    ._filters {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+        border-radius: 8px;
+        background-color: #181818;
+        padding: 10px 14px;
+        margin: 24px 0px;
+
+        ._item {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: #FFF;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            cursor: pointer;
+            background-color: #222;
+            border-radius: 4px;
+
+            img {
+                width: 18px;
+                height: 18px;
+                margin-right: 6px;
+            }
+
+            &._selected,
+            &:hover {
+                background-color: #121212;
+            }
+        }
+    }
+
+    .d3_container {
+        padding: 0px 10px !important;
+
+        .d3_data_switch {
+            padding: 6px 10px;
+        }
+    }
+
+    .dummySection {
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(4px);
+            background: rgba(27, 27, 27, 0.041); // frosted glass tint
+            z-index: 1;
+            border-radius: 16px;
+        }
+    }
+
+    .news_wrap:hover {
+        background: #181818;
+    }
+
+    .news_wrap {
+        padding: 16px;
+        border-radius: 8px;
+        background: #1B1B1B;
+        margin-top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        h1 {
+            color: #FFF;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+        }
+
+        p {
+            color: #A5A5A5;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: -0.16px;
+        }
+
+        ._created {
+            color: #989898;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.16px
+        }
+
+        .news_wrap_button {
+            display: flex;
+            gap: 12px;
+
+            button {
+                padding: 8.73px; 
+                border-radius: 8.727px;
+                background: #222;
+                border: none;
+                outline: none;
+                color: #989898;
+                font-size: 15.273px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 120%;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            button:hover {
+                background: #121212;
+                color: #FFF;
+            }
+        }
+        .d3_container.linechart {
+            .d3_data_details {
+                top: 0px;
+                padding: 8px 20px;
+            }
+        }
+
+        &.type_bookmark {
+            ._top {
+                display: flex;
+                align-items: center;
+
+                ._dnd-icon {
+                    height: 20px;
+                    width: 20px;
+                    cursor: grabbing;
+                    pointer-events: none;
+                }
+
+                ._date {
+                    color: #989898;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 20px; /* 125% */
+                    letter-spacing: -0.16px;
+                    margin-left: 12px;
+                }
+                ._source {
+                    color: #00CB7D;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                    padding-left: 30px;
+                    position: relative;
+
+                    &::before {
+                        background-color: #00CB7D;
+                        content: "";
+                        width: 7px;
+                        height: 7px;
+                        border-radius: 50%;
+                        position: absolute;
+                        left: 13px;
+                        top: 7px;
+                    }
+                }
+
+                ._bookmark-icon {
+                    margin-left: auto;
+                    width: 34px;
+                    height: 34px;
+                    pointer-events: none;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            ._content {
+                width: 95%;
+                margin: 10px auto;
+            }
+
+            &.dragging {
+                opacity: 0.3;
+                border: 2px dashed #fff9;
+            }
+        }
+    }
+
+    .bookmarked_section {
+
+    }
+
+    .skeleton {
+        width: 100%;
+        height: 150px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(90deg, #1b1b1b 80%, #e0e0e028 90%, #1b1b1b 100%);
+        background-size: 200% 100%;
+        animation: shimmer 3s infinite linear;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    @media (max-width:850px) {
+        .news_wrap {
+            .news_wrap_button {
+                align-self: baseline;
+            }
+        }
+    }
+}

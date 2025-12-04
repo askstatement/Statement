@@ -1,0 +1,68 @@
+{
+  "stripe": [
+    {
+      "title": "Revenue",
+      "description": "Quick insights on earnings, refunds, fees and growth trends.",
+      "questions": [
+        "What is my total revenue for this month.",
+        "Show my revenue for the last 12 months.",
+        "Break down revenue by plan or products.",
+        "What is my net revenue after fees and refunds.",
+        "How much did I refund this quarter.",
+        "Which plans or products generate the highest revenue.",
+        "Show my revenue growth month over month.",
+        "What is my average revenue per customer.",
+        "Compare this month’s revenue to the previous month.",
+        "Show top 10 days with highest revenue."
+      ]
+    },
+    {
+      "title": "Customers",
+      "description": "Quick visibility into growth, churn and customer value.",
+      "questions": [
+        "How many new customers did I add this month.",
+        "Which customers have the highest lifetime value.",
+        "Show customers who churned this month.",
+        "Which customer segments are growing fastest.",
+        "Show repeat customers and their spend.",
+        "How many active customers do I have.",
+        "Which customers downgraded or upgraded.",
+        "Show customer acquisition trends.",
+        "Which customers have overdue invoices.",
+        "Show customers with failed payment attempts."
+      ]
+    },
+    {
+      "title": "Payments and Invoices",
+      "description": "Status of payments, failures, disputes and pending invoices.",
+      "questions": [
+        "Show all failed payments this week.",
+        "Which invoices are overdue.",
+        "List payments that were disputed.",
+        "Show all invoices that are unpaid.",
+        "Which payments were refunded.",
+        "What is my payment success rate.",
+        "Show all invoices due in the next 7 days.",
+        "List high value invoices above a chosen amount.",
+        "Which payments are pending review.",
+        "Show all payments processed today."
+      ]
+    },
+    {
+      "title": "Subscriptions",
+      "description": "An overview of MRR, churn, renewals and subscription movement.",
+      "questions": [
+        "What is my current MRR.",
+        "What will my projected MRR look like next month.",
+        "Show all new subscriptions this week.",
+        "Which customers cancelled this month.",
+        "Show all upgrades or downgrades.",
+        "What is my churn rate.",
+        "Show subscribers who failed to renew.",
+        "How many active subscriptions do I have.",
+        "Show trial users converting to paid plans.",
+        "Compare subscription growth across plans."
+      ]
+    }
+  ]
+}

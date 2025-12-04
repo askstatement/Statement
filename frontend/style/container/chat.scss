@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+.chat_layout {
+    background-color: #0A0A0A;
+    color: #FFF;
+    height: 100%;
+    
+    *{
+        font-family: 'Inter', sans-serif;
+    }
+
+    .page_content {
+        width: 847px;
+        margin: 0px auto;
+    }
+
+    .chat_layout input:-webkit-autofill,
+    .chat_layout input:-webkit-autofill:hover,
+    .chat_layout input:-webkit-autofill:focus,
+    .chat_layout textarea:-webkit-autofill,
+    .chat_layout textarea:-webkit-autofill:hover,
+    .chat_layout textarea:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important; /* match chat bg */
+        -webkit-text-fill-color: #9d9d9d !important; /* text color */
+        caret-color: #9d9d9d;
+        border: none !important;
+        transition: background-color 9999s ease-in-out 0s !important; /* prevent yellow flash */
+    }
+
+    .chat_layout_container {
+        height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        .welcome_connect:nth-of-type(2) {
+            margin-top: 20px;
+        }
+
+        .welcome_connect:nth-of-type(1) {
+            margin-top: 32px;
+        }
+
+        .welcome_container {    
+            border: 1px solid #2A2A2A;
+            border-radius: 24px;
+            flex-direction: column;
+            width: 100%;
+            height: fit-content;
+            max-height: 60vh;
+            padding: 28px;
+            display: flex;
+            position: absolute;
+            z-index: 8;
+            background: #171717;
+            top: 71px;
+
+            h1 {
+                margin: 24px 0 16px 0;
+                color: rgba(255, 255, 255, 0.96);
+                font-size: 36px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 44px; 
+                letter-spacing: -0.72px;
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.74);
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 140%; /* 28px */
+                letter-spacing: -0.4px;
+                margin: 0;
+            }
+
+            h4 {
+                color: rgba(255, 255, 255, 0.80);
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; 
+                letter-spacing: -0.2px;
+            }
+
+            .account_connect_button {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                width: fit-content;
+
+                .source_details {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+
+                    p {
+                        color: #C3C3C3;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 20px; 
+                    }
+
+                    div {
+                        display: flex;
+                        padding: 8px;
+                        border-radius: 10px;
+                        border: 0.8px solid rgba(63, 63, 71, 0.50);
+                        background: rgba(39, 39, 42, 0.50);
+
+                        img {
+                            width: 32px;
+                            height: 32px;
+                        }
+                    }
+                }
+            }
+
+            .welcome_connect {
+                display: flex;
+                flex-direction: column;
+                border-radius: 8px;
+                gap: 16px;
+                width: 100%;
+
+                h2 {
+                    color: rgba(255, 255, 255, 0.96);
+                    font-size: 24px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 40px; /* 166.667% */
+                    letter-spacing: -0.48px;
+                }
+            }
+        }
+    }
+
+    @media (max-width:850px) {
+
+        .page_content {
+            padding: 0 18px;
+            width: 100%;
+            margin: 27px 0;
+        }
+
+        .chat_layout_container {
+            height: calc(100vh - 116px);
+            .welcome_container {
+
+                .welcome_connect {
+                    flex-direction: column;
+                    gap: 9.5px;
+                    width: 100%;
+                    padding: 16px 8px;
+
+                    button {
+                        // width: 90%;
+                    }
+                }
+            }
+        }
+    }
+}

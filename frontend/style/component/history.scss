@@ -1,0 +1,199 @@
+.chat_history-container {
+    overflow-y: scroll; /* still allows scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scroll-behavior: smooth;
+    min-height: 80vh;
+    margin-top: 36px;
+
+    ._header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+        padding: 16px;
+        ._title {
+            color: #fff;
+            letter-spacing: -.56px;
+            margin-bottom: 6px;
+            font-size: 28px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 34px;
+        }
+        ._description {
+            margin-top: 6px;
+            color: #fff9;
+            letter-spacing: -.16px;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+        }
+    }
+
+    ._section {
+        width: 100%;
+        margin-top: 32px;
+        ._title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+
+            ._heading {
+                color: #989898;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px; /* 125% */
+                letter-spacing: -0.16px;
+                
+            }
+
+            ._queries {
+                color: #989898;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px; /* 125% */
+                letter-spacing: -0.16px;
+            }
+
+            ._description {
+                color: rgba(255, 255, 255, 0.60);
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 120% */
+                letter-spacing: -0.2px;
+            }
+        }
+
+        ._item {
+            margin-top: 16px;
+            border-radius: 8px;
+            background: #1B1B1B;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+
+            &:hover {
+                background: #181818;
+            }
+
+            ._left {
+                max-width: 80%;
+                ._name {
+                    color: rgba(255, 255, 255, 0.96);
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 24px; /* 110% */
+                    letter-spacing: -0.2px;
+                    max-width: 100%;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                }
+                ._summary {
+                    color: #A5A5A5;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 125% */
+                    letter-spacing: -0.16px;
+                    margin-top: 4px;
+                    max-width: 100%;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                }
+            }
+
+            ._right {
+                margin-left: 16px;
+                position: relative;
+                width: fit-content;
+                cursor: pointer;
+
+                img {
+                    padding: 4px;
+                }
+
+                ._wrap {
+                    padding-top: 5px;
+                    position: absolute;
+                    top: 29px;
+                    right: 0;
+                    z-index: 10;
+                }
+
+                ._options {
+                    padding: 8px;
+                    border: 1px solid #313131;
+                    background: #1E1E1E;
+                    border-radius: 16px;
+                    display: none;
+                    min-width: 170px;
+
+                    li {
+                        display: flex;
+                        align-items: center;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px; /* 150% */
+                        letter-spacing: -0.16px;
+                        color: rgba(255, 255, 255, 0.60);
+                        padding: 8px;
+                        border-radius: 12px;
+
+                        svg {
+                            width: 24px;
+                            height: 24px;
+                            margin-right: 8px;
+
+                            path {
+                                stroke: rgba(255, 255, 255, 0.60);
+                            }
+                        }
+
+                        &:not(:first-child) {
+                            margin-top: 8px;
+                        }
+
+                        &:hover {
+                            color: #FFF;
+                            background: #393A3A;
+
+                            svg {
+                                path {
+                                    stroke: #FFF;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &:hover {
+                    img {
+                        background-color: #393A3A;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }
+                    ._options {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
