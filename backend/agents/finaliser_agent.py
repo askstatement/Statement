@@ -9,7 +9,7 @@ from llm.message import (
 )
 from llm.prompt_template import PromptTemplate
 
-from .prompts.finaliser import ROUTER_AGENT_FINALISER_PROMPT
+from .prompts.finaliser import FINALISER_PROMPT
 
 MAX_PLANNER_STEPS = 10
 MODEL_NAME = "gpt-5.1"
@@ -18,7 +18,7 @@ REASONING_EFFORT = "none"
 
 class FinaliserAgent(Agent):
     def planner_prompt(self):
-        return PromptTemplate(ROUTER_AGENT_FINALISER_PROMPT)
+        return PromptTemplate(FINALISER_PROMPT)
 
     def user_context_prompt(self, user_query: str):
         context = """
