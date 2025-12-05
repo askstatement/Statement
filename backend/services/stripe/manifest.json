@@ -1,0 +1,5 @@
+{
+  "service_name": "stripe",
+  "agent_name": "stripe",
+  "version": "0.0.1"
+}

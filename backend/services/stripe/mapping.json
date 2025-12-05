@@ -1,0 +1,307 @@
+[
+    {
+        "index": "stripe_invoices",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "invoice_id": {"type": "keyword"}, 
+                    "invoice_number": {"type": "keyword"},
+                    "customer_name": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_customers",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "customer_id": {"type": "keyword"},
+                    "email": {"type": "keyword"},
+                    "name": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_products",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "product_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_subscriptions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "subscription_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_balancetransactions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "balance_transaction_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_events",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "event_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_charges",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "charge_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_refunds",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "refund_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_payouts",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "payout_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_balance",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "balance_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_disputes",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "dispute_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_files",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "file_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_mandates",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "file_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_payment_intents",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "payment_intent_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_plans",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "plan_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_coupons",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "coupon_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_payment_methods",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "payment_method_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_setup_intents",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "setup_intent_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_tax_rates",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tax_rate_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "stripe_transfers",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "transfer_id": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }
+]
