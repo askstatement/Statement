@@ -1,7 +1,8 @@
 import json
 from datetime import date, datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List
 
+from db.query_agent import QueryAgent
 from llm.agent import Agent
 from llm.message import (
     JSONLLMResponse,
@@ -64,6 +65,13 @@ class PlannerAgent(Agent):
         )
 
     def call_tool(self, tool_name: str, params: dict) -> str:
+        if tool_name == "perform_elasticsearch_query":
+            query_agent = QueryAgent("QueryAgent", provider=self.provider)
+            return query_agent.handle_request(
+                project_id=self.project_id,
+                user_query=params.get("user_message", ""),
+            )
+
         for toolset in self.toolsets:
             tool: Tool = toolset.get_tool_by_name(tool_name)
             if tool:
@@ -127,6 +135,7 @@ class PlannerAgent(Agent):
     def handle_request(
         self, project_id: str, user_query: str, previous_messages: [LLMMessage]
     ):
+        self.project_id = project_id
         print(f"Planning for task: {user_query} by agent: {self.name}")
         if self.check_if_toolset_empty():
             print("No toolsets available for planning. Going to QueryAgent directly.")

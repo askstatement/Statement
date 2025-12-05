@@ -55,6 +55,30 @@ IMPORTANT: Your output is always a single step consisting of either a single tho
         TOOLS (use only these names/params)
         [[tools_description]]
 
+        {
+        "type": "function",
+            "function": {
+                "name": "perform_elastic_database_data_lookup",
+                "description": (
+                    "Perform a data lookup in Elasticsearch databse based on the user message. "
+                    "Only use this function if the user is looking for specific data in which "
+                    "the scope is outside the provided functions."
+                ),
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "user_message": {
+                            "type": "string",
+                            "description": (
+                                "Descriptive user message to database agent for performing data lookup."
+                            ),
+                        }
+                    },
+                    "required": ["user_message"],
+                    "additionalProperties": False,
+                },
+            },
+        }
         IMPORTANT: ALWAYS RESPOND IN VALID JSON FORMAT WITH NO ADDITIONAL TEXT.
 """
 
