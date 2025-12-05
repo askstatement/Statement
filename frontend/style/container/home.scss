@@ -4,16 +4,17 @@
     align-items: center;
     justify-content: center;
     max-width: 800px;
-    margin: 8rem auto;
+    margin: 10rem auto;
     ._statement-logo {
-      margin: 10px auto;
+      margin: 10px auto 30px auto;
       width: 80px;
       height: auto;
     }
     h1 {
       color: #fff;
       text-align: center;
-      font-weight: 500;
+      font-weight: 400;
+      letter-spacing: normal;
     }
     h2 {
       color: hsla(0,0%,100%,.6);
@@ -22,6 +23,7 @@
       font-size: 24px;
       margin: 30px 0px 30px;
       font-weight: 200;
+      letter-spacing: normal;
     }
     ._action-button {
       margin: 30px 0px 0px 0px;
@@ -37,9 +39,11 @@
         h3 {
           color: #fff;
           margin: 0px 0px 10px 0px;
+          font-size: 24px;
         }
         ._explanation {
           color: hsla(0,0%,100%,.6);
+          font-size: 20px;
         }
       }
       ._right {
@@ -59,8 +63,9 @@
       }
     }
     ._support {
-      margin-top: 15px;
+      margin-top: 50px;
       color: hsla(0,0%,100%,.6);
+      font-size: 20px;
       a {
         color: #00ca7e;
         text-decoration: none;
