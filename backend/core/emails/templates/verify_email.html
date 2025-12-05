@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><b>Hi {{ first_name }},</b></p>
+<p>
+  <div>
+    Welcome to Statement! Please confirm your email address to activate your account.
+  </div>
+  <div>
+    <a href="{{ verify_link }}">Verify Email</a>
+  </div>
+</p>
+<p>This link will expire in 24 hours for security purposes. If you didn’t
+sign up for Statement, you can safely ignore this email. Thank you
+for joining us. We’re excited to help you turn financial data into
+real insights!
+</p>
+<p>
+  <div>Warm regards,</div>
+  <div>The Statement Team</div>
+</p>
+{% endblock %}
