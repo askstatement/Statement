@@ -6,28 +6,43 @@ import json
 import re
 import sys
 import traceback
-from binhex import REASONABLY_LARGE
 from typing import Any, Dict, List
 
 from agents.prompts.query_agent import (
-    CONSTRAINTS_TEMPLATE,
-    JSON_OUTPUT_TEMPLATE,
-    OPS_SCHEMA_TEMPLATE,
-    QUESTION_TEMPLATE,
-    SYSTEM_TEMPLATE,
-    TOOLS_TEMPLATE,
+    CONSTRAINTS_PROMPT,
+    JSON_OUTPUT_PROMPT,
+    OPS_SCHEMA_PROMPT,
+    QUESTION_PROMPT,
+    SYSTEM_PROMPT,
+    TOOLS_PROMPT,
 )
-from elastic_tool_schema import build_elastic_tool_schema
+from core.db.elastic import ElasticClient
 from elasticsearch import exceptions
 from llm.agent import Agent
 from llm.message import JSONLLMResponse, LLMMessage, LLMMessageRole, LLMRequest
+from llm.prompt_template import PromptTemplate
 from llm.tool import Tool
-from schema.elasticschema import ES_SCHEMA  # your existing ES schema description
-from services.elastic import es, get_mapping
 
-from backend.llm.prompt_template import PromptTemplate
+from .elastic_tool_schema import build_elastic_tool_schema
+from .summariser_tools import SummariserTools
 
-from .summarizer_tools import SummariserTools
+# Optional: use static schema if available
+try:
+    from schema.elasticschema import ES_SCHEMA
+except Exception:
+    ES_SCHEMA = None
+
+_es_client = ElasticClient()
+es = _es_client.client  # raw Elasticsearch client
+
+
+def get_mapping(index: str):
+    try:
+        resp = es.indices.get_mapping(index=index)
+        return resp.get(index, {}).get("mappings", {})
+    except Exception:
+        return {}
+
 
 MODEL = "gpt-5.1"
 REASONING_EFFORT = "low"
@@ -39,8 +54,8 @@ def build_system_prompt(
     index_metadata_json = json.dumps(index_metadata, indent=2)
     tools_json = json.dumps(tools, indent=2)
     return (
-        PromptTemplate(SYSTEM_TEMPLATE)
-        .concat(PromptTemplate(TOOLS_TEMPLATE))
+        PromptTemplate(SYSTEM_PROMPT)
+        .concat(PromptTemplate(TOOLS_PROMPT))
         .render(
             index_metadata_json=index_metadata_json,
             tools_json=tools_json,
@@ -57,10 +72,10 @@ def build_user_prompt(
     db_tools_schema_json = json.dumps(db_tools_schema, indent=2)
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
-    pt = PromptTemplate(OPS_SCHEMA_TEMPLATE).concat(
-        PromptTemplate(CONSTRAINTS_TEMPLATE),
-        PromptTemplate(JSON_OUTPUT_TEMPLATE),
-        PromptTemplate(QUESTION_TEMPLATE),
+    pt = PromptTemplate(OPS_SCHEMA_PROMPT).concat(
+        PromptTemplate(CONSTRAINTS_PROMPT),
+        PromptTemplate(JSON_OUTPUT_PROMPT),
+        PromptTemplate(QUESTION_PROMPT),
     )
     return pt.render(
         db_tools_schema_json=db_tools_schema_json,

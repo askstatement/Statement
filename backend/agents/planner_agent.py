@@ -2,7 +2,7 @@ import json
 from datetime import date, datetime
 from typing import Any, Dict, List
 
-from db.query_agent import QueryAgent
+from agents.db.query_agent import QueryAgent
 from llm.agent import Agent
 from llm.message import (
     JSONLLMResponse,
