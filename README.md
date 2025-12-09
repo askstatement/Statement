@@ -1,6 +1,12 @@
 # Statement
 
-A modern, AI-powered financial intelligence platform built with FastAPI, Next.js, and advanced language models. Statement helps users gain deep insights into their financial data through natural language processing and intelligent analysis.
+👋 Welcome to Statement
+
+Statement is a modern, open source financial intelligence platform powered by GPT. It connects directly to your financial tools and lets you explore your data through natural, conversational queries. Ask questions, review trends, or dive into specifics - all in plain language.
+
+Our goal is to give founders and developers a reliable, well-structured foundation for understanding their finances. This monorepo includes everything behind Statement: the financial data models, the reasoning and NLP layers, the APIs and SDKs, and the web and upcoming mobile clients.
+
+Learn more at askstatement.com.
 
 ## Features
 
