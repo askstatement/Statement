@@ -10,14 +10,10 @@ Learn more at askstatement.com.
 
 ## Features
 
-- **AI-Powered Analysis**: Uses GPT models for intelligent financial data analysis
-- **Multi-Document Support**: Process PDFs, images, and structured financial documents
-- **Real-Time Chat**: WebSocket-based real-time conversation with AI agents
-- **Financial Integrations**: Connects to Plaid, Stripe, and other financial services
-- **Full-Text Search**: Elasticsearch integration for fast financial data queries
-- **User Management**: Secure authentication with JWT and multi-tenant support
-- **Cron Jobs**: Scheduled tasks for automated insights generation
-- **Modern UI**: Next.js-based responsive frontend with React
+- Unified Financial Data - Connect revenue, accounting, and revenue tools and get all your financial data structured in one place.
+- Instant Insights - Receive clear, real-time answers about cash flow, spending, performance, and runway without touching spreadsheets.
+- API and GPT Interface - Build with APIs or use the conversational interface to query your financials in plain language.
+- Open-source and Self-hosted - Run Statement on your own infrastructure and tailor it to your security and compliance requirements.
 
 ## Tech Stack
 
