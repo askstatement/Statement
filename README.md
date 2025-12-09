@@ -6,7 +6,7 @@ Statement is a modern, open source financial intelligence platform powered by GP
 
 Our goal is to give founders and developers a reliable, well-structured foundation for understanding their finances. This monorepo includes everything behind Statement: the financial data models, the reasoning and NLP layers, the APIs and SDKs, and the web and upcoming mobile clients.
 
-Learn more at askstatement.com.
+Learn more at http://askstatement.com.
 
 ## Features
 
