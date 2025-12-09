@@ -1,4 +1,4 @@
-# Statement - GPT-Native Financial Intelligence Platform
+# Statement
 
 A modern, AI-powered financial intelligence platform built with FastAPI, Next.js, and advanced language models. Statement helps users gain deep insights into their financial data through natural language processing and intelligent analysis.
 
