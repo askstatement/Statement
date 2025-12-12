@@ -1,4 +1,18 @@
 services:
+  init:
+    image: alpine:latest
+    container_name: statementai-init
+    volumes:
+      - ./backend/setup.sh:/setup.sh
+      - ./.env:/.env
+      - ${DATA_PATH}:${DATA_PATH}
+    entrypoint: sh /setup.sh
+    env_file:
+      - .env
+    user: "0"
+    networks:
+      - default
+
   frontend:
     build: ./frontend
     container_name: statementai-frontend
