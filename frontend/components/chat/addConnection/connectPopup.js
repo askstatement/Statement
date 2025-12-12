@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import StripeConnect from "@/components/chat/connectionButton/stripeConnect";
 import CommingSoon from "@/components/chat/connectionButton/commingSoon";
 
-const RUNTIME_ENV = process.env.RUNTIME_ENV || 'production';
-
 export default function ConnectPopup(props) {    
     const { stripeCode, dataSources, onClose } = props;
 
@@ -43,7 +41,7 @@ export default function ConnectPopup(props) {
                                     </a>
                                 </h1>
                                 <p>Track bank inflows and outflows for a clear cash flow view. Spot gaps early, manage balances daily, and link multiple cards. Available with US and EU banks (UK coming soon).</p>
-                                {RUNTIME_ENV === 'production' ? <CommingSoon/> : <PlaidConnect dataSources={dataSources}/>}
+                                <CommingSoon/>
                             </div>
                         </div>
                     </div>
