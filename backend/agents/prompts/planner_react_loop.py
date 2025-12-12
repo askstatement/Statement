@@ -58,7 +58,7 @@ IMPORTANT: Your output is always a single step consisting of either a single tho
         {
         "type": "function",
             "function": {
-                "name": "perform_elastic_database_data_lookup",
+                "name": "perform_elasticsearch_query",
                 "description": (
                     "Perform a data lookup in Elasticsearch databse based on the user message. "
                     "Only use this function if the user is looking for specific data in which "

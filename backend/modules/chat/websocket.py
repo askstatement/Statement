@@ -107,7 +107,8 @@ class ChatWebSocket(BaseWebSocketHandler):
                     conversation_id=convId
                 )
                 token_usage = router_response.get("token_usage", {})
-                response = router_response.get("response", "")
+                response = router_response.get("response_text", "")
+                agent_responses = router_response.get("agent_responses", {})
                 
                 followup = ""
                 steps = []
@@ -116,11 +117,7 @@ class ChatWebSocket(BaseWebSocketHandler):
                 serializable_steps = jsonable_encoder(steps)
 
                 response_data = {
-                    "message": response,
-                    "followup": followup,
-                    "graph_data": graph_data,
-                    "steps": serializable_steps, 
-                    "messages": messages
+                    "agent_responses": agent_responses
                 }
 
                 try:
@@ -139,6 +136,7 @@ class ChatWebSocket(BaseWebSocketHandler):
                     project_id=project_id,
                     type='response',
                     content=response,
+                    agent_responses=agent_responses,
                     followup=followup,
                     steps=serializable_steps,
                     messages=messages,
