@@ -375,7 +375,7 @@ This project is licensed under the LICENSE file.
 
 For issues, questions, or contributions:
 - GitHub Issues: [Statement/issues](https://github.com/askstatement/Statement/issues)
-- Email: support@askstatement.com
+- Email: hello@askstatement.com
 
 ## Acknowledgments
 
