@@ -1,5 +1,9 @@
 # Statement
 
+<p align="center">
+  <img src="https://cdn.askstatement.com/images/statement-icon.png" alt="Image" width="400" />
+</p>
+
 👋 Welcome to Statement
 
 Statement is a modern, open source financial intelligence platform powered by GPT. It connects directly to your financial tools and lets you explore your data through natural, conversational queries. Ask questions, review trends, or dive into specifics - all in plain language.
