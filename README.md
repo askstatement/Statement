@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://cdn.askstatement.com/images/statement-icon-1.png" alt="Image" width="400" />
+  <img src="https://cdn.askstatement.com/images/statement-icon.png" alt="Image" width="400" />
 </p>
 
 # 👋 Welcome to Statement
