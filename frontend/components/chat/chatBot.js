@@ -255,7 +255,6 @@ export default function ChatBot (props) {
                                     enableTypingAnimation: false,
                                     promptId: item._id,
                                     reaction: item.reaction,
-                                    is_bookmarked: item.is_bookmarked,
                                 });
                             }
                         } else {
@@ -266,7 +265,6 @@ export default function ChatBot (props) {
                               enableTypingAnimation: false,
                               promptId: item._id,
                               reaction: item.reaction,
-                              is_bookmarked: item.is_bookmarked,
                             });
                         }
                     }
@@ -430,7 +428,6 @@ export default function ChatBot (props) {
         enableTypingAnimation = false, 
         promptId = null, 
         reaction,
-        is_bookmarked = false,
     }) => {
         if (!chunk) return;
         let botDiv = currentBotDiv;
@@ -443,7 +440,6 @@ export default function ChatBot (props) {
                     <button class="chat-action copy"><img src="/next_images/copy.svg" alt="Copy"/><span>Copy</span></button>
                     <button class="chat-action thumbs-up ${reaction == 'liked'? 'active': ''}"><img src="/next_images/like.svg" alt="Like"/></button>
                     <button class="chat-action thumbs-down ${reaction == 'disliked'? 'active': ''}"><img src="/next_images/dislike.svg" alt="Dislike"/></button>
-                    <button class="chat-action bookmark ${is_bookmarked == true ? 'active': ''}"><img src="/next_images/bookmark.svg" alt="Bookmark"/></button>
                 </div>
             </div>`, 'bot-message');
 
