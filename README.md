@@ -12,6 +12,7 @@ Our goal is to give founders and developers a reliable, well-structured foundati
 Learn more at http://askstatement.com.
 
 ## Features
+| ![Image 1](https://cdn.askstatement.com/images/Image2-Github.gif) | ![Image 2](https://cdn.askstatement.com/images/Image3-Github.gif) |
 
 - Unified Financial Data - Connect revenue, accounting, and revenue tools and get all your financial data structured in one place.
 - Instant Insights - Receive clear, real-time answers about cash flow, spending, performance, and runway without touching spreadsheets.
