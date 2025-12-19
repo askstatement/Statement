@@ -66,10 +66,10 @@ class PlannerAgent(Agent):
 
     def call_tool(self, tool_name: str, params: dict) -> str:
         if tool_name == "perform_elasticsearch_query":
-            query_agent = QueryAgent("QueryAgent", provider=self.provider)
+            query_agent = QueryAgent(f"{self.tool_cls}QueryAgent", provider=self.provider)
             return query_agent.handle_request(
                 project_id=self.project_id,
-                user_query=params.get("user_message", ""),
+                user_request=params.get("user_message", ""),
             )
 
         for toolset in self.toolsets:

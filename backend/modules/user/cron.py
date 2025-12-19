@@ -81,7 +81,7 @@ class GenerateInsightsJob(BaseCronJob):
                 messages=[], 
                 conversation_id=None
             )
-            response = router_response.get("response", "")
+            response = router_response.get("response_text", "")
             explanation = ""
             description = f"{response}\n\n{description_tmpl}"
             # Save the generated insight to the database

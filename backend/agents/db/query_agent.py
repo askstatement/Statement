@@ -1,11 +1,11 @@
 # db_agent/db_query_agent.py
 
-import datetime
 import inspect
 import json
 import re
 import sys
 import traceback
+from datetime import datetime
 from typing import Any, Dict, List
 
 from agents.prompts.query_agent import (
@@ -166,8 +166,8 @@ class QueryAgent(Agent):
     - Runs the local SummariserTools pipeline on the ES results.
     """
 
-    def __init__(self, provider):
-        super().__init__(name="db_query_agent", provider=provider)
+    def __init__(self, name, provider):
+        super().__init__(name=name, provider=provider)
 
         self.es = es
         self.index_metadata = _build_index_metadata()

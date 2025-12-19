@@ -243,15 +243,30 @@ export default function ChatBot (props) {
                     } else if (item.type === 'file_upload') {
                         appendMessage(`<div class="chat-bubble user-bubble file-upload-bubble">File uploaded: ${item.content}</div>`, 'user-message');
                     } else if (item.type === 'response') {
-                        appendBotMessage({
-                          chunk: `${item.content}${item.followup ? "\n\n" + item.followup : ""}`,
-                          graph_data: item.graph_data,
-                          speed: 20,
-                          enableTypingAnimation: false,
-                          promptId: item._id,
-                          reaction: item.reaction,
-                          is_bookmarked: item.is_bookmarked,
-                        });
+                        const { agent_responses = [] } = item || {};
+                        if (agent_responses && agent_responses.length > 0) {
+                            for (const agent of agent_responses) {
+                                const { response_json = {} } = agent;
+                                const { graph_data, follow_up = "", final_answer = "" } = response_json;
+                                appendBotMessage({
+                                    chunk: `${final_answer}${follow_up ? '\n\n' + follow_up : ''}`,
+                                    graph_data: graph_data,
+                                    speed: 20,
+                                    enableTypingAnimation: false,
+                                    promptId: item._id,
+                                    reaction: item.reaction,
+                                });
+                            }
+                        } else {
+                            appendBotMessage({
+                              chunk: `${item.content}${item.followup ? "\n\n" + item.followup : ""}`,
+                              graph_data: item.graph_data,
+                              speed: 20,
+                              enableTypingAnimation: false,
+                              promptId: item._id,
+                              reaction: item.reaction,
+                            });
+                        }
                     }
                     setTimeout(() => {
                         const myDiv = document.getElementById("chatstreams");
@@ -307,7 +322,7 @@ export default function ChatBot (props) {
         const el = e.target;
         const parentNode = el.parentNode;
 
-        el.style.height = "25px"; 
+        el.style.height = "21px"; 
         el.style.height = el.scrollHeight + "px"; 
 
         const value = el.value;
@@ -413,7 +428,6 @@ export default function ChatBot (props) {
         enableTypingAnimation = false, 
         promptId = null, 
         reaction,
-        is_bookmarked = false,
     }) => {
         if (!chunk) return;
         let botDiv = currentBotDiv;
@@ -426,7 +440,6 @@ export default function ChatBot (props) {
                     <button class="chat-action copy"><img src="/next_images/copy.svg" alt="Copy"/><span>Copy</span></button>
                     <button class="chat-action thumbs-up ${reaction == 'liked'? 'active': ''}"><img src="/next_images/like.svg" alt="Like"/></button>
                     <button class="chat-action thumbs-down ${reaction == 'disliked'? 'active': ''}"><img src="/next_images/dislike.svg" alt="Dislike"/></button>
-                    <button class="chat-action bookmark ${is_bookmarked == true ? 'active': ''}"><img src="/next_images/bookmark.svg" alt="Bookmark"/></button>
                 </div>
             </div>`, 'bot-message');
 
@@ -599,17 +612,23 @@ export default function ChatBot (props) {
                     inputRef.current.focus();
                 } else {
                     const data = JSON.parse(e.data);
-                    const { message, followup, graph_data, steps, messages, error_code = null } = data || {};
+                    const { agent_responses = [], error_code = null } = data || {};
                     if (error_code) return handleWsErrors(error_code);
-                    console.debug("steps:", steps);
-                    console.debug("messages:", messages);
-                    console.debug("graph_data:", graph_data);
-                    appendBotMessage({
-                        chunk: `${message}${followup ? '\n\n' + followup : ''}`,
-                        graph_data: graph_data,
-                        speed: 20,
-                        enableTypingAnimation: true
-                    });
+                    if (agent_responses && agent_responses.length > 0) {
+                        for (const agent of agent_responses) {
+                            const { response_json = {} } = agent;
+                            const { graph_data, steps=[], messages = [], follow_up = "", final_answer = "" } = response_json;
+                            console.debug("steps:", steps);
+                            console.debug("messages:", messages);
+                            console.debug("graph_data:", graph_data);
+                            appendBotMessage({
+                                chunk: `${final_answer}${follow_up ? '\n\n' + follow_up : ''}`,
+                                graph_data: graph_data,
+                                speed: 20,
+                                enableTypingAnimation: true
+                            });
+                        }
+                    }
                     inputRef.current.focus();
                 }
             };
@@ -679,15 +698,33 @@ export default function ChatBot (props) {
         setLoading({...loading, isLoading: false});
     };
 
-    const createMessageJsonString = (message) => {
+    const createMessageJsonString = (message, agentsList) => {
         return JSON.stringify({
-            agents_selected: selectedAgents,
+            agents_selected: agentsList,
             message:message
         })
     }
 
+    const parseBeforePolling = (msg) => {
+        // parse the msg string for explicit @agent
+        const agentPattern = /@(\w+)/g;
+        const agents = [];
+        let match;
+        while ((match = agentPattern.exec(msg)) !== null) {
+            agents.push(match[1]);
+        }
+        // remove the @agent from the msg
+        const parsedMsg = msg.replace(agentPattern, '').trim();
+        inputRef.current.value = parsedMsg;
+        return agents;        
+    }
+
     const handleSendClick = async () => {
         const msg = inputRef.current.value.trim();
+        // parse the msg string for explicit @agent
+        const agentsSelected = parseBeforePolling(msg);
+        let agentSet = new Set([...selectedAgents, ...agentsSelected]);
+        let agentsList = Array.from(agentSet);
         if (!msg) return;
         inputRef.current.value = '';
         setChatError(false);
@@ -699,7 +736,7 @@ export default function ChatBot (props) {
         // check if currConvId exists, if not create it
         if (!currConvId) return await handleNewProjectClick("First Project", true);
         if (!window.chatSocket) return console.error("WebSocket not initialized");
-        window.chatSocket.send(createMessageJsonString(msg));
+        window.chatSocket.send(createMessageJsonString(msg, agentsList));
         inputRef.current.disabled = true;
         sendButtonRef.current.disabled = true;
     };
@@ -718,7 +755,6 @@ export default function ChatBot (props) {
 
     const chatSuggested = (e) => {
         document.querySelector('#maininput').value = e.target.textContent
-        document.querySelector('#mainsendbutton').click()
     }
 
     const handleToggleAddConnection = () => {
@@ -849,8 +885,6 @@ export default function ChatBot (props) {
                         ))}
                     </div>
                     <div className="chat_suggested_q_wrap">
-                        <h2 className="suggested_title">{activeTab.title}</h2>
-                        <p className="suggested_description">{activeTab.description}</p>
                         <div className="suggested_question_wrap">
                             {randomQuestions?.map((q, index) => (
                                 <div className="_question" key={index} onClick={(e) => chatSuggested(e)}>

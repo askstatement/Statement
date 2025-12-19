@@ -91,7 +91,8 @@ class ChatInterface(BaseInterface):
                 conversation_id=None
             )
             token_usage = router_response.get("token_usage", {})
-            response = router_response.get("response", "")
+            response = router_response.get("response_text", "")
+            agent_responses = router_response.get("agent_responses", {})
                 
             # Save response
             response_data = PromptData(
@@ -102,6 +103,7 @@ class ChatInterface(BaseInterface):
                 project_id=project_id,
                 type='response',
                 content=response,
+                agent_responses=agent_responses,
                 followup="",
                 steps=[],
                 messages=[],

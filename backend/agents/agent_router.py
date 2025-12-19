@@ -3,9 +3,11 @@ import json
 import os
 from typing import Optional
 
+from bson import ObjectId
+
 from agents.finaliser_agent import FinaliserAgent
 from agents.planner_agent import PlannerAgent
-from bson import ObjectId
+from agents.pre_router_agent import PreRouterAgent
 from core.base_database import BaseDatabase
 from core.logger import Logger
 from core.registry import ServiceRegistry
@@ -95,6 +97,14 @@ class AgentRouter(Agent):
                 {"conversation_id": convoId}
             ).to_list(length=None)
         return prompts
+    
+    def extract_json(self, response_text: str):
+        try:
+            response_json = json.loads(response_text)
+            return response_json
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse JSON response: {e}")
+            return {}
 
     async def handle_request(
         self,
@@ -140,6 +150,26 @@ class AgentRouter(Agent):
                     )
                     for msg in reversed(previous_messages)
                 ]
+        # replace all @agent_name with empty string in the query
+        for agent in available_agents:
+            at_agent_name = f"@{agent['agent_name']}"
+            query = query.replace(at_agent_name, "").strip()
+        
+        # pass user query through pre-router agent to get structured response
+        pre_router_agent = PreRouterAgent(
+            name="PreRouterAgent",
+            provider=self.provider,
+        )
+        pre_router_response = pre_router_agent.process_user_query(query, previous_messages, available_agents, agent_scope)
+        logger.info(f"[{project_id}] Pre-router response: {pre_router_response}")
+        if pre_router_response and pre_router_response.get("escalate", False) in [False, 'false']:
+            # if no escalation needed, return the direct answer
+            final_answer = pre_router_response.get("final_answer", "I'm sorry, I cannot assist with that request.")
+            return {
+                "response_text": final_answer,
+                "token_usage": pre_router_agent.total_token_usage,
+                "agent_responses": [{ "agent_name": pre_router_agent.name, "response_json": pre_router_response }],
+            }
 
         toolset_registry = ToolSetRegistry()
         loaded_services = ServiceRegistry._services.keys()
@@ -149,6 +179,10 @@ class AgentRouter(Agent):
 
         step_concurrency = 6
         step_semaphore = asyncio.Semaphore(step_concurrency)
+        
+        # TODO: fix later, limit only one agent per request for now due to large token usage
+        if agent_scope == [] and available_agents and len(available_agents) > 1:
+            available_agents = available_agents[:1]
 
         async def run_agent_loop(agent):
             async with step_semaphore:
@@ -205,7 +239,7 @@ class AgentRouter(Agent):
                     agent_final_responses.append(
                         {
                             "agent_name": f"{agent_name}-finaliser",
-                            "response": final_response,
+                            "response_json": self.extract_json(final_response),
                         }
                     )
                     agent_token_usage.append(
@@ -222,7 +256,7 @@ class AgentRouter(Agent):
 
         # conact all final responses
         combined_response = "\n".join(
-            [resp["response"] for resp in agent_final_responses]
+            [resp["response_json"].get("final_answer", "") for resp in agent_final_responses]
         )
         # combine token usage
         combined_token_usage = {}
@@ -231,7 +265,7 @@ class AgentRouter(Agent):
                 combined_token_usage[key] = combined_token_usage.get(key, 0) + value
 
         return {
-            "response": combined_response,
+            "response_text": combined_response,
             "token_usage": combined_token_usage,
             "agent_responses": agent_final_responses,
         }
