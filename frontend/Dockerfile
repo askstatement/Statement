@@ -5,16 +5,15 @@ RUN mkdir -p /usr/src/app/next
 WORKDIR /usr/src/app/next
 
 COPY package*.json ./
-COPY yarn.lock ./
 
-RUN yarn install
+RUN npm install
 
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
 RUN ls
 
 EXPOSE 3000
 
-CMD [ "yarn", "start" ]
+CMD [ "npm", "run", "start" ]
