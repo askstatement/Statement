@@ -124,6 +124,36 @@ Statement/
 - MongoDB 8.0
 - Elasticsearch 8.13.0
 
+## Configuration
+
+### Environment Variables
+
+Key environment variables (see `.env.example` for full list):
+
+```bash
+# Database
+MONGO_HOST=localhost
+MONGO_USER=statement@25
+MONGO_PASSWORD=kY2xUqkxGhJU
+MONGO_PORT=27017
+MONGO_DB_NAME=statementai
+ELASTICSEARCH_HOSTS=http://localhost:9200
+ELASTIC_USERNAME=elastic
+ELASTIC_PASSWORD=your_password
+
+# API Keys
+OPENAI_API_KEY=sk-...
+STRIPE_API_KEY=sk_live_...
+
+# Server
+ENABLE_CRON=true
+LOG_LEVEL=INFO
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:8765
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_...
+```
+
 ### Installation
 
 #### Using Docker Compose (Recommended)
@@ -150,7 +180,7 @@ Statement/
 
 4. **Start services**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 5. **Access the application**
@@ -194,35 +224,6 @@ yarn dev
 
 Access frontend at http://localhost:3000
 
-## Configuration
-
-### Environment Variables
-
-Key environment variables (see `.env.example` for full list):
-
-```bash
-# Database
-MONGO_HOST=localhost
-MONGO_USER=statement@25
-MONGO_PASSWORD=kY2xUqkxGhJU
-MONGO_PORT=27017
-MONGO_DB_NAME=statementai
-ELASTICSEARCH_HOSTS=http://localhost:9200
-ELASTIC_USERNAME=elastic
-ELASTIC_PASSWORD=your_password
-
-# API Keys
-OPENAI_API_KEY=sk-...
-STRIPE_API_KEY=sk_live_...
-
-# Server
-ENABLE_CRON=true
-LOG_LEVEL=INFO
-
-# Frontend
-NEXT_PUBLIC_API_URL=http://localhost:8765
-NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_...
-```
 
 ## API Documentation
 
@@ -345,13 +346,13 @@ Services are containerized and orchestrated via Docker Compose:
 
 ```bash
 # Build and start all services
-docker-compose up -d
+docker compose up -d
 
 # View logs
-docker-compose logs -f backend
+docker compose logs -f backend
 
 # Stop services
-docker-compose down
+docker compose down
 ```
 
 ### Production Considerations
