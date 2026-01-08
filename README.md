@@ -179,7 +179,12 @@ WS_HOST=localhost:8765/ws
    # ... other variables
    ```
 
-4. **Start services**
+4. **Initialize data directories** (first time only)
+   ```bash
+   docker compose run --rm init
+   ```
+
+5. **Start services**
    ```bash
    docker compose up -d
    ```
