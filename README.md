@@ -140,6 +140,7 @@ MONGO_DB_NAME=statementai
 ELASTICSEARCH_HOSTS=http://localhost:9200
 ELASTIC_USERNAME=elastic
 ELASTIC_PASSWORD=your_password
+DATA_PATH=/home/ubuntu/..
 
 # API Keys
 OPENAI_API_KEY=sk-...
@@ -150,8 +151,8 @@ ENABLE_CRON=true
 LOG_LEVEL=INFO
 
 # Frontend
-NEXT_PUBLIC_API_URL=http://localhost:8765
-NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_...
+API_HOST=http://localhost:8765/api
+WS_HOST=localhost:8765/ws
 ```
 
 ### Installation
