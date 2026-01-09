@@ -3,11 +3,13 @@ from .utils import render_template
 import os
 
 DEFAULT_SENDER = os.getenv("EMAIL_FROM", None)
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY", None)
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", None)
 
 def send_email(subject: str, to_email: str, html_body: str, text_body: str = ""):
     """Send an email using Amazon SES"""
     # silently drop if no sender configured
-    if not DEFAULT_SENDER:
+    if not DEFAULT_SENDER or not AWS_ACCESS_KEY or not AWS_SECRET_ACCESS_KEY:
         return None
     response = ses_client.send_email(
         Source=DEFAULT_SENDER,

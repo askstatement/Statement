@@ -166,33 +166,35 @@ export default function SocialButtons(props) {
 
   return (
     <div className='socials'>
-      <Script
-        src="https://accounts.google.com/gsi/client"
-        strategy="afterInteractive"
-        onLoad={handleGoogleScriptLoad}
-      />
-      <button
-        className='social_button google'
-        onClick={handleGoogleButtonClick}
-        disabled={!googleLoaded}
-        type="button"
-      >
-        <img src="/next_images/google.svg" alt="Google Logo" />
-        <span>Continue with Google</span>
-      </button>
-      <button
-        className='social_button microsoft'
-        type="button"
-        onClick={handleLogin}
-        disabled={!msalInstance}
-      >
-        <img src="/next_images/microsoft.svg" alt="Microsoft Logo" />
-        <span>Continue with Microsoft Account</span>
-      </button>
-      {/* <button className='social_button apple' type="button">
-        <img src="/next_images/apple.svg" alt="Apple Logo" />
-        <span>Continue with Apple</span>
-      </button> */}
+      {GOOGLE_CLIENT_ID &&
+        <>
+          <Script
+            src="https://accounts.google.com/gsi/client"
+            strategy="afterInteractive"
+            onLoad={handleGoogleScriptLoad}
+          />
+          <button
+            className='social_button google'
+            onClick={handleGoogleButtonClick}
+            disabled={!googleLoaded}
+            type="button"
+          >
+            <img src="/next_images/google.svg" alt="Google Logo" />
+            <span>Continue with Google</span>
+          </button>
+        </>
+      }
+      {MS_CLIENT_ID &&
+        <button
+          className='social_button microsoft'
+          type="button"
+          onClick={handleLogin}
+          disabled={!msalInstance}
+        >
+          <img src="/next_images/microsoft.svg" alt="Microsoft Logo" />
+          <span>Continue with Microsoft Account</span>
+        </button>
+      }
     </div>
   );
 }

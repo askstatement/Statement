@@ -7,7 +7,7 @@ source .env
 set +a
 
 # Create data directories
-mkdir -p "$DATA_PATH"/{esdata,mongodata}
+mkdir -p "$DATA_PATH"/esdata "$DATA_PATH"/mongodata
 
 # Set proper ownership for Docker container users
 # elasticsearch runs as uid 1000, mongodb runs as uid 999
