@@ -11,10 +11,12 @@ class UserSignup(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+    token: Optional[str] = Field(default=None)
 
 class TokenResponse(BaseModel):
-    access_token: str
-    session_id: str
+    access_token: Optional[str] = Field(default=None)
+    session_id: Optional[str] = Field(default=None)
+    two_factor_enabled: Optional[bool] = Field(default=False)
     token_type: str = "bearer"
   
 class GoogleAuthRequest(BaseModel):
