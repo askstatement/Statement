@@ -5,31 +5,19 @@ import { useState } from "react";
 import ConnectPopup from "./connectPopup";
 
 export default function AddConnection(props) {
-    const { onClose, dataSources, stripeCode, xeroCode, qbCode, qbRealmId } = props;
-    
-    // 'connect' or 'paypal'
+    const { onClose, dataSources, stripeCode } = props;
+
+    // 'connect', 'paypal', or 'chargebee'
     const [activePopup, setActivePopup] = useState('connect');
-    
-    // Shared PayPal sync state
-    const [paypalSyncState, setPaypalSyncState] = useState({
-        isLoading: false,
-        isError: false,
-        loadingText: ''
-    });
 
-    const handleOpenPaypalPopup = () => {
-        setActivePopup('paypal');
-    };
-
-    const handleCloseAll = () => {
-        // Reset states
-        setPaypalSyncState({
-            isLoading: false,
-            isError: false,
-            loadingText: ''
-        });
-        setActivePopup('connect');
-        onClose();
+    // Helper to set popup and reload page
+    const handleOnBack = (popup, syncStarted = false) => {
+        setActivePopup(popup);
+        if (syncStarted) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        }
     };
 
     return (
@@ -38,13 +26,9 @@ export default function AddConnection(props) {
                 <ConnectPopup
                     dataSources={dataSources}
                     stripeCode={stripeCode}
-                    xeroCode={xeroCode}
-                    qbCode={qbCode}
-                    qbRealmId={qbRealmId}
-                    onClose={handleCloseAll}
-                    onOpenPaypalPopup={handleOpenPaypalPopup}
-                    paypalSyncState={paypalSyncState}
-                    setPaypalSyncState={setPaypalSyncState}
+                    onClose={onClose}
+                    onOpenPaypalPopup={() => setActivePopup('paypal')}
+                    onOpenChargebeePopup={() => setActivePopup('chargebee')}
                 />
             )}
         </>
