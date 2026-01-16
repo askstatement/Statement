@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react';
-import posthog from 'posthog-js';
 
 import '@/style/container/auth.scss';
 
@@ -23,7 +22,7 @@ export default function Login () {
         e.preventDefault();
         setMessage("");
         setSignupLoading(true)
-        const minLoadingTime = 3000; 
+        const minLoadingTime = 1000; 
         const startTime = Date.now();
 
         try {
@@ -45,7 +44,6 @@ export default function Login () {
             });
 
             if (res.status === 200) {
-                setPostHogUser(email);
                 setEmail("");
                 setPassword("");
                 window.location.href = '/login'; // Redirect to login after successful signup
@@ -59,14 +57,6 @@ export default function Login () {
             setSignupLoading(false)
         }
     };
-
-    const setPostHogUser = (email) => {
-        posthog.identify(email, {
-            email: email,
-        });
-
-        posthog.capture('signup_completed')
-    }
 
     return (
         <div className="auth_container">

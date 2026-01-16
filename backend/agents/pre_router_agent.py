@@ -7,13 +7,10 @@ from llm.message import (
     LLMMessageRole,
     LLMRequest,
 )
-from core.logger import Logger
 from llm.prompt_template import PromptTemplate
-from .prompts.pre_router import PRE_ROUTER_PROMPT, AVAILABLE_AGENTS_PROMPT
 
-logger = Logger(__name__)
+from .prompts.pre_router import AVAILABLE_AGENTS_PROMPT, PRE_ROUTER_PROMPT
 
-MAX_PLANNER_STEPS = 10
 MODEL_NAME = "gpt-5.1"
 REASONING_EFFORT = "none"
 
@@ -21,7 +18,7 @@ REASONING_EFFORT = "none"
 class PreRouterAgent(Agent):
     def planner_prompt(self):
         return PromptTemplate(PRE_ROUTER_PROMPT)
-    
+
     def available_agent_context(self, available_agents: list, agent_scope: list):
         available_agent_template = PromptTemplate(AVAILABLE_AGENTS_PROMPT)
 
@@ -43,16 +40,14 @@ class PreRouterAgent(Agent):
             user_query=user_query,
             now=now,
         )
-    
-    def extract_json(self, response_text: str):
-        try:
-            response_json = json.loads(response_text)
-            return response_json
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON response: {e}")
-            return {}
 
-    def process_user_query(self, user_query: str, previous_messages: [LLMMessage], available_agents: list, agent_scope: list):
+    def handle_request(
+        self,
+        user_query: str,
+        previous_messages: [LLMMessage],
+        available_agents: list,
+        agent_scope: list,
+    ):
         # SYSTEM PROMPT
         system_prompt = (
             self.planner_prompt()
@@ -66,7 +61,7 @@ class PreRouterAgent(Agent):
                 content=system_prompt.render(),
             )
         )
-        
+
         # ADD PREVIOUS MESSAGES
         messages.extend(previous_messages)
 
@@ -79,5 +74,5 @@ class PreRouterAgent(Agent):
         )
 
         # Generate React Loop Response
-        response = self.generate_response(request)
-        return self.extract_json(response.text)
+        response = self.generate_structured_response(request)
+        return response.json_data

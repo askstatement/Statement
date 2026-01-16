@@ -11,7 +11,7 @@ logger = Logger(__name__)
 
 @cron_job
 class GenerateInsightsJob(BaseCronJob):
-    name = "Genarate Daily Insights"
+    name = "Generate Daily Insights"
     schedule = "1d"
     active = True
 

@@ -3,6 +3,7 @@ import json
 import httpx
 import secrets
 import hashlib
+import pyotp
 from jose import jwt
 from bson import ObjectId
 from datetime import datetime, timedelta
@@ -78,7 +79,7 @@ class AuthAPI(BaseAPI):
             user.firstname,
             f"{HOST_URL}/verify-email?email={email}&token={email_token}",
         )
-        return {"msg": "User registered successfully", "project_id": str(new_project_id)}
+        return {"msg": "User registered successfully", "project_id": str(new_project_id.inserted_id)}
     
     @get("/verify-email")
     async def verify_email(self, email: str = Query(None), token: str = Query(None)):
@@ -94,7 +95,7 @@ class AuthAPI(BaseAPI):
             {"email": email},
             {"$set": {"is_email_verified": True}, "$unset": {"email_token": "", "email_token_expiry": ""}},
         )
-        send_welcome_email(user.get("email"), user.get("firstname"))
+        send_welcome_email(user)
         return {"msg": "Email verified successfully"}
     
     @post("/forgot-password")
@@ -157,16 +158,39 @@ class AuthAPI(BaseAPI):
             "$unset": {"passwordResetToken": "", "pwdTokenExpiry": ""}}
         )
         
-        return {"msg": "Password reset successful"}
+        return {"msg": "Password reset successful"}   
     
     @post("/login", response_model=TokenResponse)
     async def login(self, credentials: UserLogin, request: Request):
         user = await self.utils.authenticate_user(credentials.email, credentials.password)
         if not user:
             raise HTTPException(status_code=401, detail="Invalid email or password")
-        session_id = await self.utils.save_session_info(user.get("email"), request)
-        token = self.utils.create_access_token(data={"sub": str(user.get("_id")), "email": user.get("email"), "session_id": session_id})
+        
+        if user.get("two_factor_enabled", False):
+            return {"two_factor_enabled": True}
+        
+        token, session_id = await self.utils.create_access_token(user=user, request=request)
         return {"access_token": token, "session_id": session_id}
+    
+    @post("/2fa_login")
+    async def login_2fa(self, credentials: UserLogin, request: Request):
+        token = credentials.token    
+
+        if not credentials.email or not credentials.password or not credentials.token:
+            raise HTTPException(status_code=400, detail="Email, password, and token are required")
+        
+        user = await self.utils.authenticate_user(credentials.email, credentials.password)
+
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+        secret = user.get("two_factor_secret")
+        totp = pyotp.TOTP(secret)
+        if not totp.verify(token, valid_window=1):
+            raise HTTPException(status_code=401, detail="Invalid 2FA token")
+        else:
+            token, session_id = await self.utils.create_access_token(user=user, request=request)
+            return {"access_token": token, "session_id": session_id}
     
     @get("/session")
     @auth_required
@@ -183,12 +207,12 @@ class AuthAPI(BaseAPI):
             """Invalidate a session by setting is_active to False"""
             sessions_collection = self.mongodb.get_collection("sessions")
             await sessions_collection.update_one(
-                {"session_id": session_id},
+                {"_id": ObjectId(session_id)},
                 {"$set": {"is_active": False}}
             )
             login_activity_collection = self.mongodb.get_collection("login_activities")
             await login_activity_collection.update_many(
-                {"user_email": session_id},
+                {"session_id": session_id},
                 {"$set": {"success": False}}
             )
             return {"message": "Session invalidated"}
@@ -239,7 +263,7 @@ class AuthAPI(BaseAPI):
                 # create default project for user
                 new_project_id = await self.utils.create_user_default_project(str(result.inserted_id))
                 # send welcome email
-                send_welcome_email(user.get("email"), user.get("firstname"))
+                send_welcome_email(user)
             
             if user and is_deleted and not is_signup:
                 raise HTTPException(status_code=403, detail="Can't find any account with this email. Please sign up first.")
@@ -255,13 +279,9 @@ class AuthAPI(BaseAPI):
                 # create default project for user
                 new_project_id = await self.utils.create_user_default_project(str(user.get("_id")))
                 # send welcome email
-                send_welcome_email(user.get("email"), user.get("firstname"))
+                send_welcome_email(user)
             
-            # Save session info
-            session_id = await self.utils.save_session_info(email, request)
-
-            # TODO: Save user to DB if not exists, create your own session token
-            token = self.utils.create_access_token(data={"sub": str(user.get("_id")), "email": user.get("email"), "session_id": session_id})
+            token, session_id = await self.utils.create_access_token(user=user, request=request)
 
             return {"access_token": token, "user": {"email": email, "name": name}, "session_id": session_id, "project_id": str(new_project_id)}
         except ValueError:
@@ -324,7 +344,7 @@ class AuthAPI(BaseAPI):
                 # create default project for user
                 new_project_id = await self.utils.create_user_default_project(str(user.get("_id")))
                 # send welcome email
-                send_welcome_email(user.get("email"), user.get("firstname"))
+                send_welcome_email(user)
 
             if user and is_deleted and not is_signup:
                 raise HTTPException(
@@ -343,15 +363,9 @@ class AuthAPI(BaseAPI):
                 # create default project for user
                 new_project_id = await self.utils.create_user_default_project(str(user.get("_id")))
                 # send welcome email
-                send_welcome_email(user.get("email"), user.get("firstname"))
+                send_welcome_email(user)
 
-            # Save session info (your implementation)
-            session_id = await self.utils.save_session_info(email, request)
-
-            # Create a session token (your implementation)
-            token = self.utils.create_access_token(
-                data={"sub": str(user.get("_id")), "email": user.get("email"), "session_id": session_id}
-            )
+            token, session_id = await self.utils.create_access_token(user=user, request=request)
 
             return {"access_token": token, "user": {"email": email, "name": name}, "session_id": session_id, "project_id": str(new_project_id)}
 

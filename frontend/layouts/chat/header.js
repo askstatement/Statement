@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation";
-import posthog from "posthog-js";
 
 // utils
 import { removeCookie } from "@/utils/cookie";
@@ -13,17 +12,20 @@ import SearchPopup from "@/components/chat/searchPopup";
 
 // context
 import { useProjectContext } from "@/context/ProjectContext";
+import { useSession } from "@/context/SessionContext";
 
 const API_HOST = process.env.API_HOST || "http://localhost:8765/api";
 
-export default function Navbar () {
+export default function Header () {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { project } = useProjectContext();
+    const { user: activeUser } = useSession() || {};
 
     const projectId = project?.project?._id || null;
 
     const activeTab = searchParams.get('tab');
+    const unsubscribe = searchParams.has('unsubscribe');
 
     const popupRef = useRef(null);
     const [profilePopup,setProfilePopup] = useState(false)
@@ -54,6 +56,12 @@ export default function Navbar () {
             setPreSearchResults(data.results || []);
         }
     }
+
+    useEffect(() => {
+        if(unsubscribe && activeUser) {
+            setSettingsPopup(true)
+        }
+    },[unsubscribe, activeUser])
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -97,7 +105,6 @@ export default function Navbar () {
         removeCookie("access_token")
         removeCookie("session_id")
         window.location.reload();
-        posthog.reset();
     }
 
     const navigateSection = (tab) => {

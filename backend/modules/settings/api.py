@@ -1,3 +1,7 @@
+import pyotp
+import qrcode
+import base64
+from io import BytesIO
 from core.base_api import BaseAPI, get, post
 from core.registry import ServiceRegistry
 from core.decorators import auth_required
@@ -19,6 +23,9 @@ class SettingsAPI(BaseAPI):
         users_collection = self.mongodb.get_collection("users")
         existing_user = await users_collection.find_one({"email": user['email'], "$or": [{"archived": {"$exists": False}}, {"archived": False}]})
         if existing_user:
+            password = existing_user.get('hashed_password')
+            sso_signup = password is None or password == ""
+
             return {
                 "email": existing_user.get("email"),
                 "firstname": existing_user.get("firstname"),
@@ -33,6 +40,8 @@ class SettingsAPI(BaseAPI):
                 "city": existing_user.get("city", ""),
                 "state": existing_user.get("state", ""),
                 "postcode": existing_user.get("postcode", ""),
+                "two_factor_enabled": existing_user.get("two_factor_enabled", False),
+                "is_sso_signup": sso_signup
             }
             
     @post("/profile")
@@ -97,13 +106,17 @@ class SettingsAPI(BaseAPI):
         if not user or 'email' not in user:
             raise HTTPException(status_code=401, detail="Unauthorized, no email")
         
+        current_password = password_data.get("currentPassword")
+        hashed_password = user.get('hashed_password')
+
         # Validate that newPassword is provided
-        if 'currentPassword' not in password_data:
+        if hashed_password and not current_password :
             raise HTTPException(status_code=400, detail="Current password is required")
         
-        user = await self.utils.authenticate_user(user['email'], password_data['currentPassword'])
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid current password")
+        if hashed_password:
+            user = await self.utils.authenticate_user(user['email'], password_data['currentPassword'])
+            if not user:
+                raise HTTPException(status_code=401, detail="Invalid current password")
         
         # Validate that newPassword is provided
         if 'newPassword' not in password_data:
@@ -139,27 +152,24 @@ class SettingsAPI(BaseAPI):
         recent_activity = await self.utils.get_recent_login_activity(user['email']) 
         
         return {
-            "currentSessions": current_sessions,
+            "currentSessions": self.utils.sanitize_mongo_doc(current_sessions),
             "twoFactorEnabled": existing_user.get("two_factor_enabled", False),
-            "notifyResponses": existing_user.get("notify_responses", False),
-            "notifyTaskUpdate": existing_user.get("notify_task_update", False),
+            "notify": existing_user.get("notify", False),
             "recentActivity": recent_activity
         }
         
     @post("/preferences")
     @auth_required
-    async def update_preferences(self, request: Request, data: PreferencesUpdate):
+    async def update_preferences(self, request: Request):
         user = request.state.user
+        body = await request.json()
         if not user:
             raise HTTPException(status_code=401, detail="Unauthorized")
 
         update_fields = {}
-        if data.twoFactorEnabled is not None:
-            update_fields["two_factor_enabled"] = data.twoFactorEnabled
-        if data.notifyResponses is not None:
-            update_fields["notify_responses"] = data.notifyResponses
-        if data.notifyTaskUpdate is not None:
-            update_fields["notify_task_update"] = data.notifyTaskUpdate
+
+        for key, value in body["notify"].items():
+            update_fields[f"notify.{key}"] = value
 
         if not update_fields:
             raise HTTPException(status_code=400, detail="No valid fields provided")
@@ -172,18 +182,81 @@ class SettingsAPI(BaseAPI):
 
         return {"message": "Preferences updated successfully", "updated": update_fields}
     
-    @get("/plans")
+
+    @get("/2fa_setup")
     @auth_required
-    async def get_plans(self, request: Request):        
-        plans_collection = self.mongodb.get_collection("plans")
-        plans_cursor = plans_collection.find({"$or": [ { "archived": {"$exists": False}}, { "archived": False} ]})
-        plans = []
-        async for plan in plans_cursor:
-            plan['_id'] = str(plan['_id'])
-            plans.append(plan)
+    async def setup_2fa(self, request: Request):
+        user = request.state.user
+        users = self.mongodb.get_collection("users")
+
+        if user.get("two_factor_enabled"):
+            raise HTTPException(400, "2FA already enabled")
+
+        secret = user.get("two_factor_secret")
+
+        # Generate ONLY ONCE
+        if not secret:
+            secret = pyotp.random_base32()
+            await users.update_one(
+                {"email": user["email"]},
+                {"$set": {"two_factor_secret": secret}}
+            )
+
+        totp = pyotp.TOTP(secret)
+        otpauth_url = totp.provisioning_uri(
+            name=user["email"],
+            issuer_name="Statement"
+        )
+
+        img = qrcode.make(otpauth_url)
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+
+        qr_code = f"data:image/png;base64,{base64.b64encode(buffer.getvalue()).decode()}"
+
+        return {"qrCode": qr_code, "secret": secret}
         
-        return {"plans": plans}
-    
+    @post("/2fa_verify")
+    @auth_required
+    async def verify_2fa(self, request: Request):
+        user = request.state.user
+        body = await request.json()
+
+        token = body.get("token")
+        action = body.get("twoFactorAuthValue")
+
+        if not token:
+            raise HTTPException(400, "Token required")
+
+        if action not in ("enable", "disable"):
+            raise HTTPException(400, "Invalid action")
+
+        users = self.mongodb.get_collection("users")
+
+        secret = user.get("two_factor_secret")
+        if not secret:
+            raise HTTPException(400, "2FA not setup")
+
+        totp = pyotp.TOTP(secret)
+        if not totp.verify(token, valid_window=1):
+            raise HTTPException(400, "Invalid code")
+
+        if action == "enable":
+            await users.update_one(
+                {"email": user["email"]},
+                {"$set": {"two_factor_enabled": True}}
+            )
+        else:
+            await users.update_one(
+                {"email": user["email"]},
+                {
+                    "$set": {"two_factor_enabled": False},
+                    "$unset": {"two_factor_secret": ""}
+                }
+            )
+
+        return {"success": True}
+            
     @get("/usage")
     @auth_required
     async def get_usage(self, request: Request):

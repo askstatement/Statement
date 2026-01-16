@@ -31,3 +31,5 @@ cryptography==46.0.3
 tiktoken==0.12.0
 croniter==6.0.0
 intuit-oauth==1.2.6
+pyotp==2.9.0
+qrcode==8.2

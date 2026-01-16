@@ -4,11 +4,15 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 
 from core.base_utils import BaseUtils
+from modules.auth.utils import AuthUtils
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 class SettingsUtils(BaseUtils):
+    def __init__(self):
+        super().__init__()
+        self.auth_utils = AuthUtils()
     
     def hash_password(self, password: str):
         return pwd_context.hash(password)
@@ -16,7 +20,7 @@ class SettingsUtils(BaseUtils):
     async def authenticate_user(self, email: str, password: str):
         users_collection = self.mongodb.get_collection("users")
         user = await users_collection.find_one({"email": email, "$or": [{"archived": {"$exists": False}}, {"archived": False}]})
-        if not user or not self.verify_password(password, user["hashed_password"]):
+        if not user or not self.auth_utils.verify_password(password, user["hashed_password"]):
             return False
         return user
     
@@ -31,7 +35,7 @@ class SettingsUtils(BaseUtils):
         sessions = []
         async for session in cursor:
             sessions.append({
-                "id": session["session_id"],
+                "id": session["_id"],
                 "device": session["device"],
                 "location": session["location"],
                 "isCurrent": True,

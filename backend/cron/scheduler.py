@@ -1,11 +1,14 @@
+import os
 import asyncio
+from pymongo import ReturnDocument
 from datetime import datetime, timedelta
 from croniter import croniter
 from core.loader import dynamic_import
 from core.logger import Logger
-from core.db.mongodb import MongoDBClient
 
 logger = Logger(__name__)
+
+LOCK_NAME = "cron_scheduler"
 
 async def execute_job(job: dict):
     """Run a single cron job instance asynchronously."""
@@ -168,6 +171,38 @@ async def run_cron_jobs():
     # Run concurrently
     tasks = [asyncio.create_task(execute_job(job)) for job in due_jobs]
     await asyncio.gather(*tasks)
+    
+async def check_and_aquire_cron_lock() -> bool:
+    now = datetime.utcnow()
+    expires_at = now + timedelta(seconds=2)
+    from core.base_database import BaseDatabase
+    
+    startup_locks = BaseDatabase.mongodb.get_collection("startup_locks")
+    
+    try:
+        await startup_locks.create_index("expiresAt", expireAfterSeconds=10)
+    except Exception as e:
+        logger.error(f"Failed to create index on startup_locks: {e}")
+
+    try:
+        result = await startup_locks.find_one_and_update(
+            {"_id": LOCK_NAME},
+            {
+                "$setOnInsert": {
+                    "_id": LOCK_NAME,
+                    "owner": os.getpid(),
+                    "expiresAt": expires_at,
+                    "acquiredAt": now,
+                }
+            },
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )
+        return result["owner"] == os.getpid()
+    except Exception as e:
+        # Another worker won the race
+        logger.warning(f"Failed to acquire cron lock: {e}")
+        return False
 
 
 async def start_scheduler(interval_seconds: int = 60):
@@ -178,6 +213,10 @@ async def start_scheduler(interval_seconds: int = 60):
       - Executes due jobs concurrently
     """
     logger.info(f"Starting cron scheduler (interval={interval_seconds}s)")
+    acquired = await check_and_aquire_cron_lock()
+    if not acquired:
+        logger.warning("Cron scheduler lock not acquired. Another instance may be running. Exiting scheduler.")
+        return
     while True:
         try:
             await run_cron_jobs()

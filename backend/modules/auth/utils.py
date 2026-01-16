@@ -1,4 +1,3 @@
-import os
 import requests
 from bson import ObjectId
 from typing import Optional
@@ -24,16 +23,24 @@ class AuthUtils(BaseUtils):
     def verify_password(self, plain_password, hashed_password):
         return pwd_context.verify(plain_password, hashed_password)
 
-    def create_access_token(self, data: dict, expires_delta: timedelta = None):
-        to_encode = data.copy()
+    async def create_access_token(self, user: dict, request: Request, expires_delta: timedelta = None):
+        # create session info
+        session_id = await self.save_session_info(user, request)
+        # payload with session id
+        session_data = {"sub": str(user.get("_id")), "email": user.get("email"), "session_id": session_id}
+        if user.get("is_admin", False):
+            session_data["is_admin"] = True
+        # create token
+        to_encode = session_data.copy()
         expire = datetime.utcnow() + (expires_delta or timedelta(minutes=TOKEN_EXPIRES))
         to_encode.update({"exp": expire})
-        return jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
+        return jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM), session_id
 
     async def authenticate_user(self, email: str, password: str):
         users_collection = self.mongodb.get_collection("users")
         user = await users_collection.find_one({"email": email, "$or": [{"archived": {"$exists": False}}, {"archived": False}]})
-        if not user or not self.verify_password(password, user["hashed_password"]):
+        hashed_password = user.get("hashed_password") if user else None
+        if not user or not self.verify_password(password, hashed_password):
             return False
         return user
 
@@ -56,10 +63,10 @@ class AuthUtils(BaseUtils):
         if not session_id:
             return False
         sessions_collection = self.mongodb.get_collection("sessions")
-        session = await sessions_collection.find_one({"session_id": session_id, "is_active": True})
+        session = await sessions_collection.find_one({"_id": ObjectId(session_id), "is_active": True})
         return session is not None
-
-    async def save_session_info(self, user_email: str, request: Request):
+    
+    async def save_session_info(self, user: dict, request: Request):
         """Save session information when user logs in"""
         
         # Get IP address
@@ -78,12 +85,11 @@ class AuthUtils(BaseUtils):
         user_agent = parse(request.headers.get("user-agent", ""))
         device = f"{user_agent.os.family}"
         browser = f"{user_agent.browser.family}"
-        session_id = str(ObjectId())
         
         # Create session document
         session = {
-            "user_email": user_email,
-            "session_id": session_id,
+            "user_email": user.get("email"),
+            "user_id": user.get("_id"),
             "ip_address": ip,
             "device": device,
             "browser": browser,
@@ -95,11 +101,14 @@ class AuthUtils(BaseUtils):
 
         # Save session
         sessions_collection = self.mongodb.get_collection("sessions")
-        await sessions_collection.insert_one(session)
+        session_resp = await sessions_collection.insert_one(session)
+        session_id = str(session_resp.inserted_id)
 
         # Log login activity
         activity = {
-            "user_email": user_email,
+            "user_email": user.get("email"),
+            "session_id": session_id,
+            "user_id": user.get("_id"),
             "login_time": datetime.utcnow(),
             "browser": browser,
             "location": location,

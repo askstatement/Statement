@@ -10,20 +10,28 @@ import '@/style/container/auth.scss';
 //components
 import SocialButtons from '@/components/uiElements/socialButtons';
 
+// utils
+import { getCookie, removeCookie, setSessionCookies } from '@/utils/cookie';
+
 const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [token, setToken] = useState("");
     const [signinLoading, setSigninLoading] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const [tokenError, setTokenError] = useState("");
+    const [authSection, setAuthSection] = useState("login")
     const [message, setMessage] = useState("");
     const [notification, setNotification] = useState("");
     const [forgotEmail, setFotgotEmail] = useState("");
     
     const searchParams = useSearchParams();
     const emailStatus = searchParams.get('everify');
+    const unsubscribe = searchParams.get('unsubscribe');
+    
     const hasShownToast = useRef(false);
 
     useEffect(() => {
@@ -77,7 +85,7 @@ export default function Login() {
         e.preventDefault();
         setMessage("");
         setSigninLoading(true)
-        const minLoadingTime = 3000;
+        const minLoadingTime = 1000;
         const startTime = Date.now();
         try {
             const elapsed = Date.now() - startTime;
@@ -95,24 +103,15 @@ export default function Login() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ email, password }),
-            });
+            });            
 
             if (res.status === 200) {
-                setEmail("");
-                setPostHogUser(email);
-                const resData = await res.json();
-                // Assuming the response contains an access token
-                if (resData.access_token) {
-                    console.log('Access Token:', resData.access_token);
-                    const expires = new Date();
-                    expires.setDate(expires.getDate() + 7);
-                    if (resData.session_id) {
-                        document.cookie = `session_id=${resData.session_id}; path=/; secure; samesite=lax`;
-                    }
-                    document.cookie = `access_token=${resData.access_token}; path=/; secure; samesite=lax`;
-                    // Redirect to /chat
-                    window.location.href = '/chat';
-                }
+                const resData = await res.json();      
+                if(resData.two_factor_enabled) {
+                    setAuthSection("2fa")
+                    return;
+                } 
+                verificationSuccess(resData)
             } else {
                 const data = await res.json();
                 setMessage(data.detail || "Login failed");
@@ -147,9 +146,62 @@ export default function Login() {
         }
     };
 
+    const handle2fa = async (e) => {
+        e.preventDefault()        
+        try {
+            const res = await fetch(`${API_HOST}/auth/2fa_login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ token,  email, password}),
+            });
+
+            const resData = await res.json();
+            
+            if (res.status == 200) {
+                setEmail("");
+                setToken("")
+                setTokenError("")
+                verificationSuccess(resData)
+            } else {
+                setTokenError("Invalid Token")
+            }
+        } catch (err) {
+            console.error(`Error updating Two-Factor Authentication :`, err);
+        }
+    }
+
+    const verificationSuccess = (resData) => {
+        try {
+            setEmail("");
+            setPostHogUser(email);
+                    
+            if (resData.access_token && resData.session_id) {
+                setSessionCookies(resData.access_token, resData.session_id, 7);
+                // Redirect to /chat
+                let is_checkout_flow = getCookie("is_checkout_flow");
+                if (is_checkout_flow) {
+                    removeCookie("is_checkout_flow");
+                    // parse data from cookie
+                    let details = JSON.parse(is_checkout_flow);
+                    if (details?.plan_id && typeof details?.is_annual === 'boolean') {
+                        return window.location.href = `/pricing?plan_selected=${details?.plan_id}&is_annual=${details?.is_annual}`;
+                    } else {
+                        return window.location.href = `/pricing`;
+                    }
+                } else if (unsubscribe) {
+                    return window.location.href = `/chat?unsubscribe`;
+                }
+                window.location.href = '/chat';
+            }
+        } catch(err) {
+            console.log(err);            
+        }
+    }
     return (
         <>
-            {!forgotPassword ?
+            {authSection == 'login' &&
                 <div className="auth_container">
                     <div className='auth_wrap'>
                         <div className='logo'>
@@ -171,7 +223,7 @@ export default function Login() {
                                 </button>
                             </form>
                             <div className='_error'>{message}</div>
-                            <Link href="" className='forgot_password' onClick={() => setForgotPassword(true)}>Forgot password?</Link>
+                            <Link href="" className='forgot_password' onClick={() => setAuthSection("forgot")}>Forgot password?</Link>
                             <p className='register'>Don't have an account? <a href="/signup">Sign up</a></p>
                             <div className='divider'>
                                 <div className='_before'></div>
@@ -185,7 +237,8 @@ export default function Login() {
                         </div>
                     </div>
                 </div>
-                :
+            }   
+            {authSection == 'forgot' && 
                 <div className="auth_container">
                     <div className='auth_wrap'>
                         <div className='logo'>
@@ -210,7 +263,7 @@ export default function Login() {
                                 </button>
                             </form>
                             <div className='_error'>{message}</div>
-                            <Link href="" className='forgot_password' onClick={() => setForgotPassword(false)}>Back to Sign in</Link>
+                            <Link href="" className='forgot_password' onClick={() => setAuthSection("login")}>Back to Sign in</Link>
                             <p className='register'>Don't have an account? <a href="/signup">Sign up</a></p>
                             <div className='divider'>
                                 <div className='_before'></div>
@@ -221,6 +274,45 @@ export default function Login() {
                             <div className='policy'>
                                 <p><a href='/terms'>Terms of Service</a> and <a href='/privacy'>Privacy Policy</a></p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            {authSection == '2fa' && 
+                <div className="auth_container">
+                    <div className='auth_wrap'>
+                        <div className='logo'>
+                            <img src="/next_images/logo.svg" alt="StatementAI Logo" />
+                        </div>
+                        <h1>Two Factor Authentication</h1>
+                        <div className='content-wrapper two_factor'>
+                            {notification && <div className='_notification'>{notification}</div>}
+                            <form onSubmit={handle2fa} style={{ maxWidth: 400, margin: "auto" }} autoComplete="off">
+                                <p className="two_factor_description">Enter the 6-digit code from your authenticator app</p>
+                                <div className="field_wrap">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter Code"
+                                        maxLength={6}
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        onChange={(e) => setToken(e.target.value)}
+                                        onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                                    }}
+                                    />
+                                </div>
+                                <p className='_error'>{tokenError}</p>
+                                <button type='submit' className='login_button'>
+                                    Verify
+                                </button>
+                            </form>
+                            <Link href="" className='forgot_password' onClick={() => {
+                                setAuthSection("login")
+                                setTokenError("")
+                            }}>
+                                Back to Sign in
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -2,8 +2,8 @@ import asyncio
 import json
 import os
 from typing import Optional
-
 from bson import ObjectId
+from datetime import datetime
 
 from agents.finaliser_agent import FinaliserAgent
 from agents.planner_agent import PlannerAgent
@@ -113,10 +113,9 @@ class AgentRouter(Agent):
         agent_scope=[],
         conversation_id=None,
         messages=[],
+        prompt_id=None,
     ):
-        agent_responses = []
-        agent_final_responses = []
-        agent_token_usage = []
+        agent_responses = {}
         available_agents = await self.get_available_agents_by_project_scope(project_id)
         if agent_scope:
             available_agents = [
@@ -160,15 +159,20 @@ class AgentRouter(Agent):
             name="PreRouterAgent",
             provider=self.provider,
         )
-        pre_router_response = pre_router_agent.process_user_query(query, previous_messages, available_agents, agent_scope)
+        pre_router_response = pre_router_agent.handle_request(query, previous_messages, available_agents, agent_scope)
         logger.info(f"[{project_id}] Pre-router response: {pre_router_response}")
-        if pre_router_response and pre_router_response.get("escalate", False) in [False, 'false']:
+        if pre_router_response and pre_router_response.get("needs_escalation", False) in [False, "false"]:
             # if no escalation needed, return the direct answer
             final_answer = pre_router_response.get("final_answer", "I'm sorry, I cannot assist with that request.")
             return {
                 "response_text": final_answer,
                 "token_usage": pre_router_agent.total_token_usage,
-                "agent_responses": [{ "agent_name": pre_router_agent.name, "response_json": pre_router_response }],
+                "agent_responses": [
+                    {
+                        "agent_name": pre_router_agent.name,
+                        "finaliser_response": pre_router_response,
+                    }
+                ],
             }
 
         toolset_registry = ToolSetRegistry()
@@ -203,69 +207,67 @@ class AgentRouter(Agent):
 
                     # Create a copy of previous_messages for this agent to avoid race conditions
                     agent_messages = previous_messages.copy()
-                    agent_messages.append(
-                        LLMMessage(LLMMessageRole.USER, content=query)
-                    )
+                    agent_messages.append(LLMMessage(LLMMessageRole.USER, content=query))
 
                     # Run blocking call in thread pool to avoid blocking event loop
-                    response = await asyncio.to_thread(
-                        planner_agent.handle_request, project_id, query, agent_messages
-                    )
-                    agent_responses.append(
-                        {
-                            "agent_name": agent_name,
-                            "response": response,
-                        }
-                    )
-                    agent_token_usage.append(
-                        {
-                            "agent_name": agent_name,
-                            "token_usage": planner_agent.total_token_usage,
-                        }
-                    )
-                    finaliser = FinaliserAgent(
-                        name=agent_name,
-                        provider=self.provider,
-                    )
-                    agent_responses_list = [
-                        {
-                            "agent_name": agent_name,
-                            "response": response,
-                        }
-                    ]
-                    final_response = await asyncio.to_thread(
-                        finaliser.finalise_response, query, agent_responses_list
-                    )
-                    agent_final_responses.append(
-                        {
-                            "agent_name": f"{agent_name}-finaliser",
-                            "response_json": self.extract_json(final_response),
-                        }
-                    )
-                    agent_token_usage.append(
-                        {
-                            "agent_name": f"{agent_name}-finaliser",
-                            "token_usage": finaliser.total_token_usage,
-                        }
-                    )
+                    planner_response = await asyncio.to_thread(planner_agent.handle_request, project_id, query, agent_messages)
+                    
+                    print(f"[{project_id}] Agent {agent_name} response: {json.dumps(planner_response)}")
+                    
+                    # Finalise response using FinaliserAgent
+                    finaliser = FinaliserAgent(name=agent_name, provider=self.provider)
+                    finaliser_response = await asyncio.to_thread(finaliser.finalise_response, query, {
+                        "agent_name": agent_name,
+                        "response": planner_response
+                    })
+                    
+                    # add finaliser token usage to planner agent token usage
+                    planner_agent.add_token_usage(finaliser.total_token_usage)
+                    # store raw and final responses
+                    agent_responses[agent_name] = {}
+                    agent_responses[agent_name]["planner_response"] = planner_response
+                    agent_responses[agent_name]["token_usage"] = planner_agent.total_token_usage
+                    agent_responses[agent_name]["finaliser_response"] = self.extract_json(finaliser_response)
+                    agent_responses[agent_name]["token_usage"] = planner_agent.total_token_usage
                 except Exception as e:
-                    logger.info(f"[{project_id}] Error in agent {agent_name}: {e}")
+                    logger.error(f"[{project_id}] Error in agent {agent_name}: {e}")
 
         # Run all steps in parallel (with concurrency limit) and wait for all to complete
         await asyncio.gather(*(run_agent_loop(agent) for agent in available_agents))
-
-        # conact all final responses
-        combined_response = "\n".join(
-            [resp["response_json"].get("final_answer", "") for resp in agent_final_responses]
-        )
-        # combine token usage
+        
+        combined_response = ""
         combined_token_usage = {}
-        for usage in agent_token_usage:
-            for key, value in usage["token_usage"].items():
-                combined_token_usage[key] = combined_token_usage.get(key, 0) + value
+        execution_pipelines_collection = self.db.mongodb.get_collection("execution_pipelines")
+        for agent_name, agent_resp in agent_responses.items():
+            # prepare combined response
+            combined_response += f"{agent_resp['finaliser_response'].get('final_answer', '')}\n"
+            
+            # prepare token usage
+            for token_key, tokens_used in agent_resp["token_usage"].items():
+                combined_token_usage[token_key] = combined_token_usage.get(token_key, 0) + tokens_used
+            
+            # save pipeline details to mongodb collection "execution_pipelines"
+            planner_response = agent_resp.get("planner_response", {})
+            finaliser_response = agent_resp.get("finaliser_response", {})
+            token_usage = agent_resp.get("token_usage", {})
+            pipeline = await execution_pipelines_collection.insert_one(
+                {
+                    "project_id": project_id,
+                    "prompt_id": prompt_id,
+                    "query": query,
+                    "agent": agent_name,
+                    "planner_response": planner_response,
+                    "finaliser_response": finaliser_response,
+                    "token_usage": token_usage,
+                    "created_at": datetime.utcnow(),
+                }
+            )
+            agent_responses[agent_name]["pipeline_id"] = str(pipeline.inserted_id)
 
+        # prepare agent_final_responses with pipeline ids
+        agent_final_responses = [{ "agent": agent_name } | agent_resp for agent_name, agent_resp in agent_responses.items()]
         return {
             "response_text": combined_response,
             "token_usage": combined_token_usage,
-            "agent_responses": agent_final_responses,
+            "agent_responses": agent_final_responses
         }

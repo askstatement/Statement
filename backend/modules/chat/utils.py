@@ -174,3 +174,16 @@ class ChatUtils(BaseUtils):
 
         except Exception as e:
             logger.error(f"Error generating title and summary: {e}")
+        
+    async def clear_sync_progress(self, project_id: str, service: str):
+        """Removes the progress document."""
+        collection = self.mongodb.get_collection("sync_progress")
+        await collection.delete_one({"project_id": project_id, "service": service})
+        
+    async def get_all_sync_progress(self, project_id: str):
+        """
+        Retrieves all progress documents for a given project.
+        """
+        collection = self.mongodb.get_collection("sync_progress")
+        results = await collection.find({"project_id": project_id}).to_list(length=10)
+        return results

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Script from "next/script";
 import { PublicClientApplication } from "@azure/msal-browser";
-import posthog from "posthog-js";
+
+// utils
+import { setSessionCookies } from '@/utils/cookie';
 
 const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
@@ -60,12 +62,8 @@ export default function SocialButtons(props) {
 
       if (res.ok) {
         const data = await res.json();
-        setPostHogUser(data.user.email);
 
-        if (data.session_id) {
-          document.cookie = `session_id=${data.session_id}; path=/; secure; samesite=lax`;
-        }
-        document.cookie = `access_token=${data.access_token}; path=/; secure; samesite=lax`;
+        if (data.session_id && data.access_token) setSessionCookies(data.access_token, data.session_id, 7);
 
         window.location.href = "/chat";
       } else {
@@ -137,12 +135,8 @@ export default function SocialButtons(props) {
 
       if (res.ok) {
         const data = await res.json();
-        setPostHogUser(data.user.email);
 
-        if (data.session_id) {
-          document.cookie = `session_id=${data.session_id}; path=/; secure; samesite=lax`;
-        }
-        document.cookie = `access_token=${data.access_token}; path=/; secure; samesite=lax`;
+        if (data.session_id && data.access_token) setSessionCookies(data.access_token, data.session_id, 7);
 
         window.location.href = "/chat";
       } else {
@@ -154,15 +148,6 @@ export default function SocialButtons(props) {
       props?.setMessage?.("Microsoft login failed");
     }
   };
-
-
-  const setPostHogUser = (email) => {
-    posthog.identify(email, {
-        email: email,
-    });
-
-    posthog.capture('signup_completed')
-  }
 
   return (
     <div className='socials'>

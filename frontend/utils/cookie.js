@@ -41,3 +41,13 @@ export function getSessionIdFromCookie() {
     }
     return null;
 }
+
+export function setSessionCookies(access_token, session_id, expiresInDays = 30) {
+    setCookie('access_token', access_token, expiresInDays);
+    setCookie('session_id', session_id, expiresInDays);
+}
+
+export function clearSessionCookies() {
+    removeCookie('access_token', '/');
+    removeCookie('session_id', '/');
+}

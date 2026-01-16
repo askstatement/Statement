@@ -8,8 +8,14 @@ class PromptData(BaseModel):
     model: Optional[str] = Field(default=None)
     session_id: Optional[str] = Field(default=None)
     project_id: Optional[str] = Field(default=None)
+    pipeline_id: Optional[str] = Field(default=None)
     type: Optional[Literal['prompt', 'response', 'file_upload']] = None
     content: Optional[str] = Field(default=None)
+    agent: Optional[str] = Field(default=None)
+    planner_response: Optional[str] = Field(default="")
+    finaliser_response: Optional[dict] = Field(default={})
+    agent_responses: Optional[list] = Field(default=[])
+    prompt_id: Optional[str] = Field(default=None) # reference to question prompt
     followup: Optional[str] = Field(default=None)
     graph_data: Optional[dict] = Field(default=None)
     steps: Optional[List] = Field(default=[])

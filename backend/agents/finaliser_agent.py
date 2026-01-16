@@ -34,21 +34,21 @@ class FinaliserAgent(Agent):
             now=now,
         )
 
-    def agents_response_context_prompt(self, agent_responses: list):
+    def agents_response_context_prompt(self, agent_response: dict):
         context = """
-            Agents Responses:
-            - [[agent_responses]]
+            Agents Response:
+            - [[agent_response]]
             """
         user_context_template = PromptTemplate(context)
 
-        return user_context_template.bind(agent_responses=json.dumps(agent_responses))
+        return user_context_template.bind(agent_response=json.dumps(agent_response))
 
-    def finalise_response(self, user_query: str, agent_responses: list):
+    def finalise_response(self, user_query: str, agent_response: dict):
         # SYSTEM PROMPT
         system_prompt = (
             self.planner_prompt()
             + self.user_context_prompt(user_query)
-            + self.agents_response_context_prompt(agent_responses)
+            + self.agents_response_context_prompt(agent_response)
         )
         messages = []
         messages.append(

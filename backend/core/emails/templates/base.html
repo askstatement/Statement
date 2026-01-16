@@ -11,6 +11,9 @@
 <body>
   <div class="container">
     {% block content %}{% endblock %}
+    {% if add_unsubscribe %}
+      <p style="color: #b6b6b6; text-align: center; font-size: 12px; margin-top: 25px;">You are receiving this email because you use Statement. You can <a style="cursor: pointer; text-decoration: none; color: rgb(135 135 135); font-weight: 600;" href="{{ BASE_URL }}/chat?unsubscribe" target="_blank">unsubscribe</a> from non-essential emails at any time.</p>
+    {% endif %}
   </div>
 </body>
 </html>

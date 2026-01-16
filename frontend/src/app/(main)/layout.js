@@ -1,5 +1,5 @@
 'use client'
-import "@/style/layout/external.scss"
+import "@/style/layout/main.scss"
 import "@/style/globals.scss";
 
 export default function RootLayout({ children }) {

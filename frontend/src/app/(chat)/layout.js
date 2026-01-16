@@ -1,20 +1,20 @@
 'use client';
 import "@/style/globals.scss";
 import '@/style/container/chat.scss';
-import '@/style/layout/chatlayout.scss';
+import '@/style/layout/chat.scss';
 import { useState, useEffect, Suspense } from 'react';
 import { ToastContainer, Bounce } from 'react-toastify';
 import posthog from "posthog-js";
 
 // utils
 import "@/utils/interceptFetch";
-import { removeCookie } from "@/utils/cookie";
-import { getSessionIdFromCookie } from "@/utils/cookie";
+import { getSessionIdFromCookie, clearSessionCookies } from "@/utils/cookie";
 
 // context
 import { SessionContext } from "@/context/SessionContext";
 import { ProjectProvider } from "@/context/ProjectContext";
-import Navbar from "@/components/chat/navbar";
+import { WebSocketProvider } from "@/context/WebSocketContext";
+import Header from "@/layouts/chat/header";
 
 const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 
@@ -24,7 +24,7 @@ export default function ChatLayout({ children }) {
 
   const clearSessionAndReload = () => {
     posthog.reset();
-    removeCookie("access_token")
+    clearSessionCookies();
     window.location.reload();
   }
 
@@ -54,8 +54,9 @@ export default function ChatLayout({ children }) {
       <Suspense fallback={<></>}>
         <ProjectProvider>
           <SessionContext.Provider value={session}>
-            <Navbar />
-            <main className="page_content">
+            <WebSocketProvider>
+              <Header />
+              <main className="page_content">
                 {children}
                 <ToastContainer
                   position="top-right"
@@ -70,7 +71,8 @@ export default function ChatLayout({ children }) {
                   theme="light"
                   transition={Bounce}
                 />
-            </main>
+              </main>
+            </WebSocketProvider>
           </SessionContext.Provider>
         </ProjectProvider>
       </Suspense>

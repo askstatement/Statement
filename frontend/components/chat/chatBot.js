@@ -10,6 +10,7 @@ import AddConnection from "@/components/chat/addConnection"; //imports the wrapp
 
 // context
 import { useProjectContext } from "@/context/ProjectContext";
+import { useWebSocket } from "@/context/WebSocketContext";
 import { toast } from "react-toastify";
 
 // json
@@ -19,7 +20,7 @@ const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 
 export default function ChatBot (props) {
 
-    const { stripeCode, xeroCode, qbCode, qbRealmId } = props;
+    const { stripeCode } = props;
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -28,6 +29,7 @@ export default function ChatBot (props) {
     showConnect = showConnect === "true"
 
     const { project } = useProjectContext();
+    const { syncProgress } = useWebSocket();
 
     const loadingRef = useRef(null);
     const chatContainerRef = useRef(null);
@@ -43,11 +45,11 @@ export default function ChatBot (props) {
     const [history, setChatHistory] = useState([]);
     const [chatError, setChatError] = useState(null);
     const [dataSources, setDataSources] = useState([])
-    const [suggestedData, setSuggestedData] = useState("stripe")
+    const [suggestedData, setSuggestedData] = useState([])
     const [activeTab, setActiveTab] = useState([])
     const [availableAgents, setAvailableAgents] = useState([])
     const [loadingIndex, setLoadingIndex] = useState(0);
-    const [showAddConnection, setShowAddConnection] = useState(stripeCode || xeroCode || showConnect ? true : false);
+    const [showAddConnection, setShowAddConnection] = useState(stripeCode || showConnect ? true : false);
     const [showAgentSuggestions, setShowAgentSuggestions] = useState(false);
     const [filteredAgents, setFilteredAgents] = useState([]);
     const [mentionQuery, setMentionQuery] = useState('');
@@ -75,6 +77,18 @@ export default function ChatBot (props) {
     useEffect(() => {
         if (convId) fetchHistory();
     }, []);
+
+    useEffect(() => {
+        if (!Array.isArray(dataSources) || dataSources.length === 0) return;
+
+        if (dataSources.includes("stripe")) {
+            setSuggestedData("stripe");
+        } else if (dataSources.includes("paypal")) {
+            setSuggestedData("paypal");
+        } else {
+            setSuggestedData("commonQuestions");
+        }
+    }, [dataSources]);
     
     useEffect(() => {
         if (projectId) loadAvailableAgents();
@@ -141,6 +155,31 @@ export default function ChatBot (props) {
             .slice(0, 5);
     }, [activeTab]);
         
+    const activeSync = useMemo(() => {
+        if (!syncProgress) return null;
+        // Find the first service that is 'in-progress'
+        const inProgressSync = Object.values(syncProgress).find(p => p.status === 'in-progress');
+
+        if (!inProgressSync) return null;
+
+        let current_step = 0;
+        let total_steps = 1;
+
+        if (inProgressSync.progress && typeof inProgressSync.progress === 'string') {
+            const parts = inProgressSync.progress.split('/');
+            if (parts.length === 2) {
+                current_step = parseInt(parts[0], 10) || 0;
+                total_steps = parseInt(parts[1], 10) || 1;
+            }
+        }
+
+        return {
+            ...inProgressSync,
+            current_step,
+            total_steps,
+        };
+    }, [syncProgress]);
+
 
     useEffect(() => {
         const sb = attachFileRef.current;
@@ -384,19 +423,6 @@ export default function ChatBot (props) {
                 event.target.closest('.chat-action').classList.add('active')
             }
 
-            if (bookMark) {
-                const chatBubble = bookMark.closest('.chat-bubble');
-                const promptId = chatBubble?.getAttribute('data-prompt-id') || null;
-                const isActive = bookMark.classList.contains('active');
-                const status = isActive ? 'true' : 'false';
-                bookmarkToInsights(promptId, status);
-
-                if (isActive) {
-                    bookMark.classList.remove('active')
-                } else {
-                    bookMark.classList.add('active')
-                }
-            }
         };
 
         document.addEventListener('click', handleClick);
@@ -412,14 +438,6 @@ export default function ChatBot (props) {
         });
     }
 
-    const bookmarkToInsights = async (promptId, status) => {     
-        const res = await fetch(`${API_HOST}/user/bookmark_prompt?promptId=${promptId}&status=${status}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
 
     const appendBotMessage = async ({
         chunk = "",
@@ -615,14 +633,14 @@ export default function ChatBot (props) {
                     const { agent_responses = [], error_code = null } = data || {};
                     if (error_code) return handleWsErrors(error_code);
                     if (agent_responses && agent_responses.length > 0) {
-                        for (const agent of agent_responses) {
-                            const { response_json = {} } = agent;
-                            const { graph_data, steps=[], messages = [], follow_up = "", final_answer = "" } = response_json;
+                        for (const response of agent_responses) {
+                            const { graph_data, steps=[], messages = [], followup = "", content = "", prompt_id } = response;
                             console.debug("steps:", steps);
                             console.debug("messages:", messages);
                             console.debug("graph_data:", graph_data);
                             appendBotMessage({
-                                chunk: `${final_answer}${follow_up ? '\n\n' + follow_up : ''}`,
+                                promptId: prompt_id,
+                                chunk: `${content}${followup ? '\n\n' + followup : ''}`,
                                 graph_data: graph_data,
                                 speed: 20,
                                 enableTypingAnimation: true
@@ -744,12 +762,7 @@ export default function ChatBot (props) {
     const loadProjectDataSources = (project) => {
         if (!project) return
         let sources = []
-        if (project.plaid_token) sources.push("plaid");
-        if (project.csv_uploaded) sources.push("csv");
         if (project.stripe_key) sources.push("stripe");
-        if (project.paypal_client_id && project.paypal_client_secret) sources.push("paypal");
-        if (project.xero_refresh_key) sources.push("xero");
-        if (project.quickbooks_refresh_key) sources.push("quickbooks");
         setDataSources(sources);
     }
 
@@ -900,12 +913,36 @@ export default function ChatBot (props) {
                 <AddConnection 
                     dataSources={dataSources}
                     stripeCode={stripeCode}
-                    xeroCode={xeroCode}
-                    qbCode={qbCode}
-                    qbRealmId={qbRealmId}
                     onClose={handleCloseAddConnection}
                 />
             )}
+            <div className="bottom-left-toast">
+                {activeSync && (
+                    <div className="_item">
+                        <div className="_progress-item">
+                            <div className="_top">
+                                <div className="_left">Syncing {activeSync.service.charAt(0).toUpperCase() + activeSync.service.slice(1)}</div>
+                                <div className="_right">
+                                    {activeSync.total_steps > 1 &&
+                                        `Step ${activeSync.current_step} / ${activeSync.total_steps}`
+                                    }
+                                </div>
+                            </div>
+                            <div className="_middle">
+                                <div className="_progress">
+                                    <div
+                                        className="_indicator"
+                                        style={{ width: `${(activeSync.current_step / activeSync.total_steps) * 100}%` }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="_bottom">
+                                {`Processing ${activeSync.step?.replace(/_/g, " ")}...`}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </>
     )
 }

@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional
 import openai
 from openai import OpenAI
 
+from core.logger import Logger
 from llm.message import (
     JSONLLMResponse,
     LLMMessage,
@@ -13,6 +14,8 @@ from llm.message import (
 )
 from llm.provider import BaseLLMProvider
 from llm.utils.backoff import retry_with_exponential_backoff
+
+logger = Logger(__name__)
 
 MAX_RETRIES_INVALID_JSON = 3
 
@@ -99,6 +102,7 @@ class OpenAIProvider(BaseLLMProvider):
                 cached_input_token_count=cached_input_tokens,
             )
         except Exception as e:
+            logger.error(f"Error performing OpenAI request: {e}")
             return LLMResponse(f"Error performing OpenAI request: {e}")
 
     @retry_with_exponential_backoff(errors=(openai.RateLimitError,))
@@ -163,8 +167,12 @@ class OpenAIProvider(BaseLLMProvider):
                     f"Failed to parse JSON response from OpenAI (attempt {count}): {e}"
                 )
                 if count >= MAX_RETRIES_INVALID_JSON:
+                    logger.error(f"Max retries reached for JSON parsing: {e}")
                     err = JSONLLMResponse(f'{{"error":"{str(e)}"}}')
                     return err
+                logger.error(
+                    f"Failed to parse JSON response from OpenAI (attempt {count}): {e}"
+                )
 
     @retry_with_exponential_backoff(errors=(openai.RateLimitError,))
     def generate_response_using_schema(
@@ -262,8 +270,12 @@ class OpenAIProvider(BaseLLMProvider):
             except Exception as e:
                 count += 1
                 print(
-                    f"Failed to read structured JSON output from OpenAI (attempt {count}): {e}"
+                    f"Failed to parse JSON response from OpenAI (attempt {count}): {e}"
                 )
                 if count >= MAX_RETRIES_INVALID_JSON:
+                    logger.error(f"Max retries reached for JSON parsing: {e}")
                     err = JSONLLMResponse(f'{{"error":"{str(e)}"}}')
                     return err
+                logger.error(
+                    f"Failed to parse JSON response from OpenAI (attempt {count}): {e}"
+                )
