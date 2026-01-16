@@ -92,7 +92,7 @@ class ChatInterface(BaseInterface):
             )
             token_usage = router_response.get("token_usage", {})
             response = router_response.get("response_text", "")
-            agent_responses = router_response.get("agent_responses", {})
+            agent_responses = router_response.get("agent_responses", [])
                 
             # Save response
             response_data = PromptData(
