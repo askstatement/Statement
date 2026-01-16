@@ -6,7 +6,8 @@ from bson import ObjectId
 from typing import Optional
 from datetime import datetime, timedelta
 from core.base_utils import BaseUtils
-from .models import PromptData, InsightsData
+from .models import InsightsData
+from modules.chat.models import PromptData
 from llm.message import LLMRequest
 from llm.providers.openai.openai_provider import OpenAIProvider as LLMProvider
 from core.logger import Logger
@@ -70,15 +71,6 @@ class UserUtils(BaseUtils):
             { "$set": { "reaction": reaction } }
         )
         return True if prompt.modified_count > 0 else False
-    
-    async def bookmark_prompt(self, promptId: str, status: bool) -> bool:        
-        prompts_collection = self.mongodb.get_collection("prompts")
-        prompt = await prompts_collection.update_one(
-            { "_id": ObjectId(promptId) },
-            { "$set": { "is_bookmarked": status } }
-        )
-        # TODO: write logic to add/remove from user's bookmarked list/ collection
-        return status in [True, False] if prompt.modified_count > 0 else None
     
     async def get_insights_for_project(self, project_id, limit: Optional[int] = 20, retry_count: int = 0, recreate: bool = False):
         try:

@@ -7,7 +7,8 @@ from core.base_api import BaseAPI, get, post, delete
 from core.registry import ServiceRegistry
 from core.decorators import auth_required
 from fastapi import Request
-from .models import ProjectCreateRequest, UserConversation, PromptData
+from .models import ProjectCreateRequest, UserConversation
+from modules.chat.models import PromptData
 from modules.user.models import UserProjects
 from .utils import UserUtils
 from core.logger import Logger
@@ -57,6 +58,7 @@ class UserAPI(BaseAPI):
         user = request.state.user
         keys_collection = self.mongodb.get_collection("api_keys")
         api_keys = await keys_collection.find({"project_id": projectId, "user_id": str(user.get("_id"))}).to_list(length=None)
+        api_keys = await keys_collection.find({"project_id": projectId, "user_id": str(user.get("_id")), "$or": [{"archived": {"$exists": False}}, {"archived": False}]}).to_list(length=None)
         return {"message": "SUCCESS", "keys": self.utils.sanitize_mongo_doc(api_keys)}
     
     @post("/project/api_key")
@@ -288,13 +290,6 @@ class UserAPI(BaseAPI):
             raise HTTPException(
                 status_code=500, detail=f"Error deleting profile: {str(e)}"
             )
-            
-    @get("/bookmark_prompt")
-    @auth_required
-    async def record_user_bookmark_prompt(self, request: Request, promptId: str = Query(...), status: str = Query(...)):
-        status = status.lower() == "true"
-        is_bookmarked = await self.utils.bookmark_prompt(promptId, status)
-        return {status: 200, "message": "Prompt bookmark status updated", "is_bookmarked": is_bookmarked}
 
 # Register globally
 ServiceRegistry.register_api("user", UserAPI("/user").router)
