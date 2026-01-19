@@ -221,7 +221,7 @@ If you're deploying Statement in a regulated environment (banking, healthcare, e
 ## Questions?
 
 For security-related questions:
-- Email: `security@askstatement.com`
+- Email: `hello@askstatement.com`
 - Open a discussion (for non-sensitive topics)
 - Check existing issues and documentation
 

@@ -6,25 +6,25 @@ labels: enhancement
 assignees: ''
 ---
 
-## 🎯 Feature Description
+## Feature Description
 
 A clear and concise description of what the feature is.
 
-## 🤔 Problem Statement
+## Problem Statement
 
 Is this feature request related to a problem? Describe the problem you're trying to solve:
 
 - [e.g., "I'm frustrated when..." or "It would be helpful if..."]
 
-## 💡 Proposed Solution
+## Proposed Solution
 
 Describe the solution you'd like:
 
-## 🔄 Alternative Solutions
+## Alternative Solutions
 
 Describe alternative approaches you've considered:
 
-## 📋 Use Case
+## Use Case
 
 Explain the use case and why this feature would be valuable:
 
@@ -32,7 +32,7 @@ Explain the use case and why this feature would be valuable:
 - **When would it be used?**
 - **What problem does it solve?**
 
-## 💼 Business Impact
+## Business Impact
 
 - **Priority**: (Low, Medium, High, Critical)
 - **Affects which component(s)?**:
@@ -44,7 +44,7 @@ Explain the use case and why this feature would be valuable:
   - [ ] Financial Integrations
   - [ ] Other (specify)
 
-## 📝 Examples
+## Examples
 
 Show examples of how this feature would be used:
 
@@ -53,22 +53,22 @@ Example 1:
 Example 2:
 ```
 
-## 🔗 Related Features
+## Related Features
 
 Is this related to any other features or issues?
 
 - Related to #123
 - Builds on #456
 
-## 📸 Screenshots/Mockups
+## Screenshots/Mockups
 
 If applicable, add screenshots or mockups showing what this feature might look like.
 
-## 🎓 Additional Context
+## Additional Context
 
 Add any other context or information that might be helpful:
 
-## ✔️ Checklist
+## Checklist
 
 - [ ] I've searched for similar feature requests
 - [ ] This feature aligns with Statement's goals

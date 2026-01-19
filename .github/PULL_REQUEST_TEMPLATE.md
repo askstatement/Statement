@@ -1,4 +1,4 @@
-## 📋 Description
+## Description
 
 Please include a summary of the changes and related context. Help us understand the motivation for this change.
 
@@ -6,19 +6,19 @@ Please include a summary of the changes and related context. Help us understand 
 - **What problem does it solve?**
 - **Are there any related issues?** (Link them here: closes #123)
 
-## 🎯 Type of Change
+## Type of Change
 
 Please delete options that are not relevant:
 
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] 📚 Documentation update
-- [ ] ♻️ Code refactoring
-- [ ] ⚡ Performance improvement
-- [ ] 🧪 Test update
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Documentation update
+- [ ] Code refactoring
+- [ ] Performance improvement
+- [ ] Test update
 
-## 📝 Changes Made
+## Changes Made
 
 Please provide a detailed list of changes:
 
@@ -26,7 +26,7 @@ Please provide a detailed list of changes:
 - 
 - 
 
-## 🧪 Testing
+## Testing
 
 Please describe the tests you've run and how to reproduce them:
 
@@ -42,7 +42,7 @@ Please describe the tests you've run and how to reproduce them:
 # Commands to run tests
 ```
 
-## 📦 Dependencies
+## Dependencies
 
 - [ ] No new dependencies added
 - [ ] New dependencies added (list them below)
@@ -50,7 +50,7 @@ Please describe the tests you've run and how to reproduce them:
 **New Dependencies:**
 - 
 
-## 🔄 Backend Changes
+## Backend Changes
 *Only if applicable*
 
 - [ ] Database schema changes
@@ -62,7 +62,7 @@ Please describe the tests you've run and how to reproduce them:
 **Details:**
 
 
-## 🎨 Frontend Changes
+## Frontend Changes
 *Only if applicable*
 
 - [ ] UI/UX changes
@@ -73,7 +73,7 @@ Please describe the tests you've run and how to reproduce them:
 **Details:**
 
 
-## ✅ Checklist
+## Checklist
 
 - [ ] My code follows the project's style guidelines
 - [ ] I have performed a self-review of my own code
@@ -86,11 +86,11 @@ Please describe the tests you've run and how to reproduce them:
 - [ ] I have tested this with Docker Compose setup locally
 - [ ] Environment variables are properly documented in `.env.example`
 
-## 📸 Screenshots (if applicable)
+## Screenshots (if applicable)
 
 Add screenshots or GIFs for UI changes
 
-## 🚀 Deployment Considerations
+## Deployment Considerations
 
 - [ ] Requires database migration
 - [ ] Requires environment variable changes
@@ -101,11 +101,11 @@ Add screenshots or GIFs for UI changes
 **Details:**
 
 
-## 📖 Additional Context
+## Additional Context
 
 Any additional context that would help reviewers understand this PR.
 
-## ⚠️ Breaking Changes
+## Breaking Changes
 
 Describe any breaking changes and mitigation strategies:
 
