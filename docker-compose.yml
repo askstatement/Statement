@@ -71,11 +71,12 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "try { db.adminCommand('ping') } catch(e) { exit(1) }"]
+      test: ["CMD", "mongosh", "--quiet", "-u", "${MONGO_USER}", "-p", "${MONGO_PASSWORD}", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 30
-      start_period: 30s
+      start_period: 60s
+    restart: unless-stopped
 
 volumes:
   esdata:
