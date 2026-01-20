@@ -6,11 +6,11 @@ labels: documentation
 assignees: ''
 ---
 
-## 📚 Documentation Issue
+## Documentation Issue
 
 Describe the documentation issue or improvement needed:
 
-## 📍 Location
+## Location
 
 Where is this documentation located?
 
@@ -18,7 +18,7 @@ Where is this documentation located?
 - **Section**: (if applicable)
 - **URL**: (if on website)
 
-## 🤔 Problem
+## Problem
 
 What's the problem with the current documentation?
 
@@ -27,11 +27,11 @@ What's the problem with the current documentation?
 - Is it missing important information?
 - Is it hard to find?
 
-## 💡 Suggested Improvement
+## Suggested Improvement
 
 How should this documentation be improved?
 
-## 📝 Proposed Changes
+## Proposed Changes
 
 Provide specific text or examples for the improvement:
 
@@ -39,7 +39,7 @@ Provide specific text or examples for the improvement:
 [Proposed documentation text here]
 ```
 
-## 🔍 Affected Users
+## Affected Users
 
 Who would benefit from this documentation improvement?
 
@@ -52,18 +52,18 @@ Who would benefit from this documentation improvement?
 - [ ] Contributors
 - [ ] Other (specify)
 
-## 🔗 Related Issues
+## Related Issues
 
 Is this related to any other issues or PRs?
 
 - Related to #123
 - Blocks #456
 
-## 📸 Examples
+## Examples
 
 If helpful, provide examples, screenshots, or links to reference documentation:
 
-## ✔️ Checklist
+## Checklist
 
 - [ ] I've checked if this documentation already exists
 - [ ] I've searched for similar documentation issues

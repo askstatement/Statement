@@ -6,11 +6,11 @@ labels: question
 assignees: ''
 ---
 
-## ❓ Question
+## Question
 
 What would you like to know?
 
-## 📍 Context
+## Context
 
 Provide context for your question:
 
@@ -18,7 +18,7 @@ Provide context for your question:
 - **Have you read the documentation?**
 - **What have you already tried?**
 
-## 🔍 What Have You Looked At?
+## What Have You Looked At?
 
 Have you checked:
 
@@ -29,7 +29,7 @@ Have you checked:
 - [ ] Code comments
 - [ ] Other resources (specify below)
 
-## 📝 Additional Context
+## Additional Context
 
 Provide any relevant details:
 
@@ -37,11 +37,11 @@ Provide any relevant details:
 - **Environment**: (e.g., Docker, Local, Cloud)
 - **Component**: (e.g., Backend, Frontend, Database, Authentication)
 
-## 💬 Discussion Points
+## Discussion Points
 
 What would you like to discuss or explore?
 
-## 📸 Examples
+## Examples
 
 If applicable, provide code snippets or examples:
 
@@ -49,14 +49,14 @@ If applicable, provide code snippets or examples:
 # Example code here
 ```
 
-## 🔗 References
+## References
 
 Links to related documentation, issues, or resources:
 
 - 
 - 
 
-## ✔️ Checklist
+## Checklist
 
 - [ ] I've searched the documentation
 - [ ] I've checked similar issues

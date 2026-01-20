@@ -6,17 +6,17 @@ labels: bug
 assignees: ''
 ---
 
-## 🐛 Bug Description
+## Bug Description
 
 A clear and concise description of what the bug is.
 
-## 📍 Location
+## Location
 
 - **Component**: (e.g., Chat API, Frontend UI, Backend Database Query, Authentication)
 - **File/Route**: (if known)
 - **Affected Version**: (e.g., 1.0.0, latest)
 
-## 🔄 Steps to Reproduce
+## Steps to Reproduce
 
 Steps to reproduce the behavior:
 
@@ -25,19 +25,19 @@ Steps to reproduce the behavior:
 3. Enter '...'
 4. See error
 
-## ✅ Expected Behavior
+## Expected Behavior
 
 A clear and concise description of what you expected to happen.
 
-## ❌ Actual Behavior
+## Actual Behavior
 
 What actually happens instead.
 
-## 📸 Screenshots
+## Screenshots
 
 If applicable, add screenshots or screen recordings to help explain your problem.
 
-## 🖥️ Environment
+## Environment
 
 Please complete the following information:
 
@@ -49,7 +49,7 @@ Please complete the following information:
 - **Statement Version/Branch**: [e.g., main, v1.0.0]
 - **Deployment Method**: [e.g., Docker Compose, Kubernetes, Local]
 
-## 🔍 Error Messages & Logs
+## Error Messages & Logs
 
 Please provide any error messages or relevant logs:
 
@@ -57,18 +57,18 @@ Please provide any error messages or relevant logs:
 [Paste error message or log here]
 ```
 
-## 🔗 Related Issues
+## Related Issues
 
 Is this related to any other issues or pull requests? Link them here.
 
 - Relates to #123
 - Duplicate of #456
 
-## 📝 Additional Context
+## Additional Context
 
 Add any other context about the problem here.
 
-## ✔️ Checklist
+## Checklist
 
 - [ ] I've searched for similar issues
 - [ ] I've included steps to reproduce

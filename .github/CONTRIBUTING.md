@@ -5,8 +5,8 @@ Thank you for your interest in contributing to Statement! We welcome contributio
 ## Getting Started
 
 ### Prerequisites
-- Python 3.9+
-- Node.js 18+
+- Python 3.10+
+- Node.js 20+
 - Docker & Docker Compose
 - Git
 
