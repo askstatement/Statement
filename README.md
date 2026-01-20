@@ -157,7 +157,33 @@ WS_HOST=localhost:8765/ws
 
 ### Installation
 
-#### Using Docker Compose (Recommended)
+#### Quick Setup with setup.sh (Recommended)
+
+The easiest way to get started with Statement is using the automated setup script:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/askstatement/Statement.git
+   cd Statement
+   ```
+
+2. **Run the setup script**
+   ```bash
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+
+3. **Follow the interactive prompts**
+   - The script will check Docker prerequisites
+   - Guide you through environment variable configuration
+   - Automatically generate secure passwords for MongoDB and Elasticsearch
+   - Initialize and start all services with progress tracking
+
+The setup script handles everything automatically and is the recommended approach for most users.
+
+#### Using Docker Compose (Manual)
+
+For more control over the setup process:
 
 1. **Clone the repository**
    ```bash
