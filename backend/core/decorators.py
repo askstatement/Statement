@@ -1,4 +1,3 @@
-import re
 import json
 import tiktoken
 from enum import Enum
@@ -21,6 +20,9 @@ base_utils = BaseUtils()
 class AuthMode(str, Enum):
     TOKEN = "token"
     PROJECT = "project"
+    
+class AuthScope(str, Enum):
+    USER = "user"
 
 async def get_user_from_token_data(token_data: dict):
     """Retrieve user object based on decoded JWT token data."""
@@ -28,6 +30,13 @@ async def get_user_from_token_data(token_data: dict):
     users_collection = BaseDatabase.mongodb.get_collection("users")
     user = await users_collection.find_one({"email": email, "$or": [{"archived": {"$exists": False}}, {"archived": False}]})
     return user
+
+async def get_session_from_token_data(token_data: dict):
+    """Retrieve session object based on decoded JWT token data."""
+    session_id = token_data.get("session_id")
+    sessions_collection = BaseDatabase.mongodb.get_collection("sessions")
+    session = await sessions_collection.find_one({"_id": ObjectId(session_id)})
+    return session
 
 def ws_auth_required(_func=None, mode: AuthMode = AuthMode.TOKEN):
     """
@@ -138,45 +147,58 @@ def ws_auth_required(_func=None, mode: AuthMode = AuthMode.TOKEN):
     else:
         return decorator(_func)
 
-def auth_required(func):
+def auth_required(_func=None, scope: AuthScope = AuthScope.USER):
     """
     Decorator for routes that require authentication.
     Can be used on async FastAPI endpoints.
+
+    Can be used as:
+        @auth_required
+        or
+        @auth_required(scope=AuthScope.USER)
     """
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        # Get Request object
-        request = kwargs.get("request") or next((a for a in args if isinstance(a, Request)), None)
-        if not request:
-            raise RuntimeError("Request object not found. Ensure route includes 'request: Request'.")
+    def decorator(f):
+        @wraps(f)
+        async def wrapper(*args, **kwargs):
+            # Get Request object
+            request = kwargs.get("request") or next((a for a in args if isinstance(a, Request)), None)
+            if not request:
+                raise RuntimeError("Request object not found. Ensure route includes 'request: Request'.")
 
-        # If middleware already attached user, use it
-        user = getattr(request.state, "user", None)
-        if user:
-            logger.debug(f"Authenticated user: {getattr(user, 'email', None) or user}")
-            return await func(*args, **kwargs)
+            # If middleware already attached user, use it
+            user = getattr(request.state, "user", None)
+            if user:
+                logger.debug(f"Authenticated user: {getattr(user, 'email', None) or user}")
+                return await f(*args, **kwargs)
 
-        # Else, decode token manually
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            logger.warning("Unauthorized request (missing token)")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-
-        token = auth_header[len("Bearer "):]
-        try:
-            payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
-            user_obj = await get_user_from_token_data(payload)
-            if not user_obj:
-                logger.warning("Unauthorized request (invalid token)")
+            # Else, decode token manually
+            auth_header = request.headers.get("Authorization")
+            if not auth_header or not auth_header.startswith("Bearer "):
+                logger.warning("Unauthorized request (missing token)")
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-            # You can attach decoded payload directly
-            request.state.user = user_obj
-        except JWTError as e:
-            logger.warning(f"Invalid token: {e}")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
-        return await func(*args, **kwargs)
-    return wrapper
+            token = auth_header[len("Bearer "):]
+            try:
+                payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+                user_obj = await get_user_from_token_data(payload)
+                session = await get_session_from_token_data(payload)
+                if not user_obj:
+                    logger.warning("Unauthorized request (invalid token)")
+                    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+                request.state.user = user_obj
+                request.state.session = session
+            except JWTError as e:
+                logger.warning(f"Invalid token: {e}")
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+            return await f(*args, **kwargs)
+        return wrapper
+
+    # Support both @auth_required and @auth_required(scope=...)
+    if _func is None:
+        return decorator
+    else:
+        return decorator(_func)
 
 async def get_project_and_user_from_api_key(api_key: str):
     """Retrieve project and user object associated with the given API key."""

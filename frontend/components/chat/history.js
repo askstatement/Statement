@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useProjectContext } from "@/context/ProjectContext";
 
 // utils
-import { formatDateToFriendly } from "@/utils/dateUtils";
+import { formatDate } from "@/utils/dateUtils";
 
 const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 
@@ -73,7 +73,7 @@ export default function History() {
         chats.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         const group = {}
         for (const chat of chats) {
-            const dateStr = formatDateToFriendly(chat.created_at)
+            const dateStr = formatDate(chat.created_at, "MMMM D")
             if (!group[dateStr]) group[dateStr] = []
             group[dateStr].push(chat)
         }

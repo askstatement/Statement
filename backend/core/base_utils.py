@@ -1,9 +1,13 @@
 import os
-from cryptography.fernet import Fernet, InvalidToken
 import re
+import json
 import hashlib
+import pytesseract
+from PIL import Image
+from pdf2image import convert_from_path
 from bson import ObjectId
 from datetime import datetime, date
+from cryptography.fernet import Fernet, InvalidToken
 from core.base_database import BaseDatabase
 from core.logger import Logger
 
@@ -13,6 +17,19 @@ class BaseUtils(BaseDatabase):
     def __init__(self):
         pass
     
+    def extract_text(self, file_path):
+        extracted_text = ""
+        if file_path.lower().endswith(".pdf"):
+            images = convert_from_path(file_path)
+            for i, image in enumerate(images):
+                text = pytesseract.image_to_string(image)
+                extracted_text += f"\n--- Page {i + 1} ---\n{text}"
+        else:
+            image = Image.open(file_path)
+            extracted_text = pytesseract.image_to_string(image)
+        return extracted_text
+
+
     def sanitize_mongo_doc(self, doc):
         # Handle dicts
         if isinstance(doc, dict):
@@ -33,9 +50,9 @@ class BaseUtils(BaseDatabase):
             except Exception:
                 return str(doc)
 
-        # Handle datetime safely
-        elif isinstance(doc, (datetime, )):
-            return doc  # let Mongo store it as datetime
+        # Handle datetime safely → convert to ISO string
+        elif isinstance(doc, datetime):
+            return doc.isoformat()
 
         # Fallback: primitive type or cast to str
         else:
@@ -152,3 +169,12 @@ class BaseUtils(BaseDatabase):
         unit = match.group(2)
         seconds = {"tpm": 60, "tph": 3600, "tpd": 86400}[unit]
         return count, seconds
+
+    def extract_json(self, response_text: str):
+        try:
+            response_json = json.loads(response_text)
+            return response_json
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse JSON response: {e}")
+            return {}
+        
