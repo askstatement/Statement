@@ -20,7 +20,7 @@ const API_HOST = process.env.API_HOST || 'http://localhost:8765/api';
 
 export default function ChatBot (props) {
 
-    const { stripeCode } = props;
+    const { stripeCode, xeroCode, qbCode, zohoCode, qbRealmId } = props;
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -49,7 +49,7 @@ export default function ChatBot (props) {
     const [activeTab, setActiveTab] = useState([])
     const [availableAgents, setAvailableAgents] = useState([])
     const [loadingIndex, setLoadingIndex] = useState(0);
-    const [showAddConnection, setShowAddConnection] = useState(stripeCode || showConnect ? true : false);
+    const [showAddConnection, setShowAddConnection] = useState(stripeCode || xeroCode || qbCode || zohoCode || showConnect ? true : false);
     const [showAgentSuggestions, setShowAgentSuggestions] = useState(false);
     const [filteredAgents, setFilteredAgents] = useState([]);
     const [mentionQuery, setMentionQuery] = useState('');
@@ -763,6 +763,9 @@ export default function ChatBot (props) {
         if (!project) return
         let sources = []
         if (project.stripe_key) sources.push("stripe");
+        if (project.paypal_client_id && project.paypal_client_secret) sources.push("paypal");
+        if (project.xero_refresh_key) sources.push("xero");
+        if (project.quickbooks_refresh_key) sources.push("quickbooks");
         setDataSources(sources);
     }
 
@@ -913,6 +916,10 @@ export default function ChatBot (props) {
                 <AddConnection 
                     dataSources={dataSources}
                     stripeCode={stripeCode}
+                    xeroCode={xeroCode}
+                    qbCode={qbCode}
+                    qbRealmId={qbRealmId}
+                    zohoCode={zohoCode}
                     onClose={handleCloseAddConnection}
                 />
             )}

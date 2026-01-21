@@ -7,9 +7,21 @@ import CommingSoon from "@/components/chat/connectionButton/commingSoon";
 import { useEffect, useState } from "react";
 
 const RUNTIME_ENV = process.env.RUNTIME_ENV || 'production';
+import QuickBooksConnect from "../connectionButton/quickbooksConnect";
+import XeroConnect from "../connectionButton/xeroConnect";
+import PaypalConnect from "../connectionButton/paypalConnect";
 
 export default function ConnectPopup(props) {    
-    const { stripeCode, dataSources, onClose } = props;
+    const {
+      stripeCode,
+      dataSources,
+      qbCode,
+      qbRealmId,
+      onOpenPaypalPopup,
+      onClose,
+      xeroCode,
+    } = props;
+    
     const [searchApp, setSearchApp] = useState("")
 
     const router = useRouter()
@@ -111,7 +123,10 @@ export default function ConnectPopup(props) {
                                         <img className="ext-link" src="/next_images/external-link.svg" alt="External link"/>
                                     </a>
                                 </div>
-                                <CommingSoon/>
+                                <PaypalConnect 
+                                    dataSources={dataSources} 
+                                    onOpenPaypalPopup={onOpenPaypalPopup}
+                                />
                             </div>
                             <div className="account_wrap">
                                 <div className="_title">
@@ -155,7 +170,7 @@ export default function ConnectPopup(props) {
                                         <img className="ext-link" src="/next_images/external-link.svg" alt="External link"/>
                                     </a>
                                 </div>
-                                <CommingSoon/>
+                                <QuickBooksConnect qbCode={qbCode} qbRealmId={qbRealmId} dataSources={dataSources} />
                             </div>
                             <div className="account_wrap">
                                 <div className="_title">
@@ -168,7 +183,7 @@ export default function ConnectPopup(props) {
                                         <img className="ext-link" src="/next_images/external-link.svg" alt="External link"/>
                                     </a>
                                 </div>
-                                <CommingSoon/>
+                                <XeroConnect xeroCode={xeroCode} dataSources={dataSources}/>
                             </div>
                             <div className="account_wrap">
                                 <div className="_title">
