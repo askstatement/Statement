@@ -1,0 +1,1030 @@
+[
+    {
+        "index": "xero_tenants",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "tenantName": {"type": "text"},
+                    "tenantType": {"type": "keyword"},
+                    "createdDateUtc": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "updatedDateUtc": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_invoices",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "InvoiceID": {"type": "keyword"},
+                    "InvoiceNumber": {"type": "keyword"},
+                    "type": {"type": "keyword"},
+                    "status": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "ContactName": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "DueDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "reference": {"type": "text"},
+                    "CurrencyCode": {"type": "keyword"},
+                    "CurrencyRate": {"type": "float"},
+                    "LineAmountTypes": {"type": "keyword"},
+                    "SubTotal": {"type": "float"},
+                    "TotalTax": {"type": "float"},
+                    "total": {"type": "float"},
+                    "AmountDue": {"type": "float"},
+                    "AmountPaid": {"type": "float"},
+                    "AmountCredited": {"type": "float"},
+                    "FullyPaidOnDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "HasAttachments": {"type": "boolean"},
+                    "IsDiscounted": {"type": "boolean"},
+                    "LineItems": {"type": "object"},
+                    "Payments": {"type": "object"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_accounts",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "AccountID": {"type": "keyword"},
+                    "Code": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "Type": {"type": "keyword"},
+                    "TaxType": {"type": "keyword"},
+                    "Description": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "Class": {"type": "keyword"},
+                    "EnablePaymentsToAccount": {"type": "boolean"},
+                    "ShowInExpenseClaims": {"type": "boolean"},
+                    "BankAccountNumber": {"type": "keyword"},
+                    "BankAccountType": {"type": "keyword"},
+                    "CurrencyCode": {"type": "keyword"},
+                    "ReportingCode": {"type": "keyword"},
+                    "ReportingCodeName": {"type": "text"},
+                    "HasAttachments": {"type": "boolean"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_bank_transactions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "BankTransactionID": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "ContactName": {"type": "text"},
+                    "BankAccountID": {"type": "keyword"},
+                    "BankAccountCode": {"type": "keyword"},
+                    "BankAccountName": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Reference": {"type": "text"},
+                    "IsReconciled": {"type": "boolean"},
+                    "CurrencyCode": {"type": "keyword"},
+                    "CurrencyRate": {"type": "float"},
+                    "LineAmountTypes": {"type": "keyword"},
+                    "SubTotal": {"type": "float"},
+                    "TotalTax": {"type": "float"},
+                    "Total": {"type": "float"},
+                    "Url": {"type": "keyword"},
+                    "HasAttachments": {"type": "boolean"},
+                    "PrepaymentID": {"type": "keyword"},
+                    "OverpaymentID": {"type": "keyword"},
+                    "LineItems": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_bank_transfers",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "BankTransferID": {"type": "keyword"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "FromBankAccountID": {"type": "keyword"},
+                    "FromBankAccountCode": {"type": "keyword"},
+                    "FromBankAccountName": {"type": "text"},
+                    "ToBankAccountID": {"type": "keyword"},
+                    "ToBankAccountCode": {"type": "keyword"},
+                    "ToBankAccountName": {"type": "text"},
+                    "Amount": {"type": "float"},
+                    "FromBankTransactionID": {"type": "keyword"},
+                    "ToBankTransactionID": {"type": "keyword"},
+                    "CurrencyRate": {"type": "float"},
+                    "FromIsReconciled": {"type": "boolean"},
+                    "ToIsReconciled": {"type": "boolean"},
+                    "Reference": {"type": "text"},
+                    "HasAttachments": {"type": "boolean"},
+                    "CreatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_batch_payments",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "BatchPaymentID": {"type": "keyword"},
+                    "AccountID": {"type": "keyword"},
+                    "AccountCode": {"type": "keyword"},
+                    "AccountName": {"type": "text"},
+                    "Reference": {"type": "text"},
+                    "Particulars": {"type": "text"},
+                    "Code": {"type": "text"},
+                    "Details": {"type": "text"},
+                    "Narrative": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Amount": {"type": "float"},
+                    "Type": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "TotalAmount": {"type": "float"},
+                    "IsReconciled": {"type": "boolean"},
+                    "Payments": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_budgets",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "BudgetID": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "Description": {"type": "text"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "BudgetLines": {
+                        "type": "nested",
+                        "properties": {
+                            "AccountID": {"type": "keyword"},
+                            "AccountCode": {"type": "keyword"},
+                            "BudgetBalances": {
+                                "type": "nested",
+                                "properties": {
+                                    "period": {"type": "date"},
+                                    "amount": {"type": "float"},
+                                    "unit_amount": {"type": "float"}
+                                }
+                            }
+                        }
+                    },
+                    "Tracking": {
+                        "type": "object",
+                        "properties": {
+                            "TrackingCategoryID": {"type": "keyword"},
+                            "Name": {"type": "text"},
+                            "options": {
+                                "type": "nested",
+                                "properties": {
+                                    "TrackingOptionID": {"type": "keyword"},
+                                    "tracking_option_name": {"type": "text"}
+                                }
+                            }
+                        }
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_contact_groups",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "ContactGroupID": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "Contacts": {"type": "object"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_contacts",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "ContactNumber": {"type": "keyword"},
+                    "AccountNumber": {"type": "keyword"},
+                    "ContactStatus": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "FirstName": {"type": "text"},
+                    "LastName": {"type": "text"},
+                    "EmailAddress": {"type": "keyword"},
+                    "SkypeUserName": {"type": "keyword"},
+                    "BankAccountDetails": {"type": "text"},
+                    "TaxNumber": {"type": "keyword"},
+                    "AccountsReceivableTaxType": {"type": "keyword"},
+                    "AccountsPayableTaxType": {"type": "keyword"},
+                    "IsSupplier": {"type": "boolean"},
+                    "IsCustomer": {"type": "boolean"},
+                    "DefaultCurrency": {"type": "keyword"},
+                    "Website": {"type": "keyword"},
+                    "Discount": {"type": "float"},
+                    "Addresses": {"type": "object"},
+                    "Phones": {"type": "object"},
+                    "ContactGroups": {"type": "object"},
+                    "ContactPersons": {"type": "object"},
+                    "Balances": {"type": "object"},
+                    "HasAttachments": {"type": "boolean"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_credit_notes",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "CreditNoteID": {"type": "keyword"},
+                    "CreditNoteNumber": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "ContactName": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "DueDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Reference": {"type": "text"},
+                    "CurrencyCode": {"type": "keyword"},
+                    "CurrencyRate": {"type": "float"},
+                    "LineAmountTypes": {"type": "keyword"},
+                    "SubTotal": {"type": "float"},
+                    "TotalTax": {"type": "float"},
+                    "Total": {"type": "float"},
+                    "RemainingCredit": {"type": "float"},
+                    "AppliedAmount": {"type": "float"},
+                    "FullyPaidOnDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "BrandingThemeID": {"type": "keyword"},
+                    "SentToContact": {"type": "boolean"},
+                    "HasAttachments": {"type": "boolean"},
+                    "LineItems": {"type": "object"},
+                    "Allocations": {"type": "object"},
+                    "Payments": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_linked_transactions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "LinkedTransactionID": {"type": "keyword"},
+                    "SourceTransactionID": {"type": "keyword"},
+                    "SourceLineItemID": {"type": "keyword"},
+                    "SourceTransactionTypeCode": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "TargetTransactionID": {"type": "keyword"},
+                    "TargetLineItemID": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_journals",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "JournalID": {"type": "keyword"},
+                    "JournalDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "JournalNumber": {"type": "keyword"},
+                    "CreatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Reference": {"type": "text"},
+                    "SourceID": {"type": "keyword"},
+                    "SourceType": {"type": "keyword"},
+                    "JournalLines": {"type": "object"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_items",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "ItemID": {"type": "keyword"},
+                    "Code": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "Description": {"type": "text"},
+                    "PurchaseDescription": {"type": "text"},
+                    "InventoryAssetAccountCode": {"type": "keyword"},
+                    "IsSold": {"type": "boolean"},
+                    "IsPurchased": {"type": "boolean"},
+                    "IsTrackedAsInventory": {"type": "boolean"},
+                    "TotalCostPool": {"type": "float"},
+                    "QuantityOnHand": {"type": "float"},
+                    "PurchaseDetails": {"type": "object"},
+                    "SalesDetails": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_manual_journals",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "ManualJournalID": {"type": "keyword"},
+                    "Narration": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Status": {"type": "keyword"},
+                    "LineAmountTypes": {"type": "keyword"},
+                    "ShowOnCashBasisReports": {"type": "boolean"},
+                    "HasAttachments": {"type": "boolean"},
+                    "JournalLines": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_organisation",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "OrganisationID": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "LegalName": {"type": "text"},
+                    "PaysTax": {"type": "boolean"},
+                    "Version": {"type": "keyword"},
+                    "OrganisationType": {"type": "keyword"},
+                    "BaseCurrency": {"type": "keyword"},
+                    "CountryCode": {"type": "keyword"},
+                    "IsDemoCompany": {"type": "boolean"},
+                    "OrganisationStatus": {"type": "keyword"},
+                    "RegistrationNumber": {"type": "keyword"},
+                    "EmployerIdentificationNumber": {"type": "keyword"},
+                    "TaxNumber": {"type": "keyword"},
+                    "FinancialYearEndDay": {"type": "integer"},
+                    "FinancialYearEndMonth": {"type": "integer"},
+                    "SalesTaxBasis": {"type": "keyword"},
+                    "SalesTaxPeriod": {"type": "keyword"},
+                    "DefaultSalesTax": {"type": "keyword"},
+                    "DefaultPurchasesTax": {"type": "keyword"},
+                    "PeriodLockDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "EndOfYearLockDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "CreatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Timezone": {"type": "keyword"},
+                    "OrganisationEntityType": {"type": "keyword"},
+                    "ShortCode": {"type": "keyword"},
+                    "Edition": {"type": "keyword"},
+                    "LineOfBusiness": {"type": "text"},
+                    "Addresses": {"type": "object"},
+                    "Phones": {"type": "object"},
+                    "ExternalLinks": {"type": "object"},
+                    "PaymentTerms": {"type": "object"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_over_payments",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "OverpaymentID": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "ContactName": {"type": "text"},
+                    "date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Reference": {"type": "text"},
+                    "CurrencyCode": {"type": "keyword"},
+                    "CurrencyRate": {"type": "float"},
+                    "LineAmountTypes": {"type": "keyword"},
+                    "SubTotal": {"type": "float"},
+                    "TotalTax": {"type": "float"},
+                    "Total": {"type": "float"},
+                    "RemainingCredit": {"type": "float"},
+                    "AppliedAmount": {"type": "float"},
+                    "HasAttachments": {"type": "boolean"},
+                    "LineItems": {"type": "object"},
+                    "Allocations": {"type": "object"},
+                    "Payments": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_payments",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "PaymentID": {"type": "keyword"},
+                    "InvoiceID": {"type": "keyword"},
+                    "AccountID": {"type": "keyword"},
+                    "Amount": {"type": "float"},
+                    "date": {"type": "date"},
+                    "Status": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "index": "xero_prepayments",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "PrepaymentID": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "Amount": {"type": "float"},
+                    "date": {"type": "date"},
+                    "Status": {"type": "keyword"},
+                    "Type": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_purchase_orders",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "PurchaseOrderID": {"type": "keyword"},
+                    "PurchaseOrderNumber": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "ContactID": {"type": "keyword"},
+                    "Date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "DeliveryDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "ExpectedArrivalDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_quotes",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "QuoteID": {"type": "keyword"},
+                    "QuoteNumber": {"type": "keyword"},
+                    "Status": {"type": "keyword"},
+                    "Date": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "ExpiryDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "ContactID": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_repeating_invoices",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "RepeatingInvoiceID": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "StartDate": {"type": "date","format": "strict_date_optional_time||epoch_millis"},
+                    "NextScheduledDate": {"type": "date","format": "strict_date_optional_time||epoch_millis"},
+                    "EndDate": {"type": "date","format": "strict_date_optional_time||epoch_millis"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date","format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_tax_rates",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "TaxType": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "TaxComponents": {"type": "object"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date","format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_users",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "UserID": {"type": "keyword"},
+                    "EmailAddress": {"type": "keyword"},
+                    "FirstName": {"type": "text"},
+                    "LastName": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_asset_types",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "assetTypeId": {"type": "keyword"},
+                    "assetTypeName": {"type": "keyword"},
+                    "fixedAssetAccountId": {"type": "keyword"},
+                    "depreciationExpenseAccountId": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_assets",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "assetId": {"type": "keyword"},
+                    "assetName": {"type": "keyword"},
+                    "assetTypeId": {"type": "keyword"},
+                    "purchaseDate": {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
+                    "purchasePrice": {"type": "float"},
+                    "assetStatus": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_feed_connections",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "feedConnectionId": {"type": "keyword"},
+                    "accountNumber": {"type": "keyword"},
+                    "accountName": {"type": "text"},
+                    "status": {"type": "keyword"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_statements",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "statementId": {"type": "keyword"},
+                    "feedConnectionId": {"type": "keyword"},
+                    "startBalance": {"type": "float"},
+                    "endBalance": {"type": "float"},
+                    "startDate": {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
+                    "endDate": {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "xero_payroll_employees",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "Region": {"type": "keyword"},
+                    "EmployeeID": {"type": "keyword"},
+                    "FirstName": {"type": "text"},
+                    "LastName": {"type": "text"},
+                    "Email": {"type": "keyword"},
+                    "DateOfBirth": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Status": {"type": "keyword"},
+                    "StartDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "TerminationDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Classification": {"type": "keyword"},
+                    "NINumber": {"type": "keyword"},
+                    "IRDNumber": {"type": "keyword"},
+                    "Gender": {"type": "keyword"},
+                    "TaxDeclaration": {"type": "object"},
+                    "SuperMemberships": {"type": "object"},
+                    "HomeAddress": {"type": "object"},
+                    "Address": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_payroll_pay_runs",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "Region": {"type": "keyword"},
+                    "PayRunID": {"type": "keyword"},
+                    "PayRunPeriodStartDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "PayRunPeriodEndDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "PayRunStatus": {"type": "keyword"},
+                    "PaymentDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "PayrollCalendarID": {"type": "keyword"},
+                    "Posted": {"type": "boolean"},
+                    "Wages": {"type": "float"},
+                    "Deductions": {"type": "float"},
+                    "Tax": {"type": "float"},
+                    "Super": {"type": "float"},
+                    "Reimbursement": {"type": "float"},
+                    "NetPay": {"type": "float"},
+                    "Payslips": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_payroll_payslips",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "Region": {"type": "keyword"},
+                    "PayslipID": {"type": "keyword"},
+                    "EmployeeID": {"type": "keyword"},
+                    "PayRunID": {"type": "keyword"},
+                    "FirstName": {"type": "text"},
+                    "LastName": {"type": "text"},
+                    "Wages": {"type": "float"},
+                    "Deductions": {"type": "float"},
+                    "Tax": {"type": "float"},
+                    "Super": {"type": "float"},
+                    "Reimbursements": {"type": "float"},
+                    "NetPay": {"type": "float"},
+                    "EarningsLines": {"type": "object"},
+                    "LeaveEarningsLines": {"type": "object"},
+                    "TimesheetEarningsLines": {"type": "object"},
+                    "DeductionLines": {"type": "object"},
+                    "ReimbursementLines": {"type": "object"},
+                    "LeaveAccrualLines": {"type": "object"},
+                    "SuperannuationLines": {"type": "object"},
+                    "TaxLines": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_payroll_timesheets",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "Region": {"type": "keyword"},
+                    "TimesheetID": {"type": "keyword"},
+                    "EmployeeID": {"type": "keyword"},
+                    "StartDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "EndDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Status": {"type": "keyword"},
+                    "TotalHours": {"type": "float"},
+                    "TimesheetLines": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "xero_payroll_leave_applications",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "tenantId": {"type": "keyword"},
+                    "Region": {"type": "keyword"},
+                    "LeaveApplicationID": {"type": "keyword"},
+                    "EmployeeID": {"type": "keyword"},
+                    "LeaveTypeID": {"type": "keyword"},
+                    "Title": {"type": "text"},
+                    "StartDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "EndDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "Description": {"type": "text"},
+                    "Status": {"type": "keyword"},
+                    "LeavePeriods": {"type": "object"},
+                    "UpdatedDateUTC": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "cleaned_data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }
+]

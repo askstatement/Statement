@@ -1,0 +1,637 @@
+[
+    {
+        "index": "quickbooks_account",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "FullyQualifiedName": {"type": "text"},
+                    "AccountType": {"type": "keyword"},
+                    "AccountSubType": {"type": "keyword"},
+                    "Classification": {"type": "keyword"},
+                    "AcctNum": {"type": "keyword"},
+                    "CurrentBalance": {"type": "float"},
+                    "CurrentBalanceWithSubAccounts": {"type": "float"},
+                    "CurrencyRef": {"type": "object"},
+                    "Active": {"type": "boolean"},
+                    "SubAccount": {"type": "boolean"},
+                    "ParentRef": {"type": "object"},
+                    "Description": {"type": "text"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    },{
+        "index": "quickbooks_bill",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "SyncToken": {"type": "keyword"},
+                    "APAccountRef": {"type": "object"},
+                    "VendorRef": {"type": "object"},
+                    "TxnDate": {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
+                    "TotalAmt": {"type": "float"},
+                    "CurrencyRef": {"type": "object"},
+                    "LinkedTxn": {"type": "object"},
+                    "SalesTermRef": {"type": "object"},
+                    "DueDate": {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
+                    "Line": {"type": "object"},
+                    "Balance": {"type": "float"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {"type": "date", "format": "strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_budget",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "StartDate": {"type": "date","format":"strict_date_optional_time||epoch_millis"},
+                    "EndDate": {"type": "date","format":"strict_date_optional_time||epoch_millis"},
+                    "BudgetEntryType": {"type": "keyword"},
+                    "BudgetType": {"type": "keyword"},
+                    "BudgetDetail": {"type": "object"},
+                    "Active": {"type": "boolean"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {"type": "date","format":"strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_cashflow",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Header": {"type": "object"},
+                    "Rows": {"type": "object"},
+                    "Columns": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {"type": "date","format":"strict_date_optional_time||epoch_millis"}
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_company_info",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "CompanyName": {"type": "text"},
+                    "LegalName": {"type": "text"},
+                    "CompanyAddr": {"type": "object"},
+                    "CustomerCommunicationAddr": {"type": "object"},
+                    "LegalAddr": {"type": "object"},
+                    "PrimaryPhone": {"type": "object"},
+                    "CompanyStartDate": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "EmployerId": {"type": "keyword"},
+                    "FiscalYearStartMonth": {"type": "keyword"},
+                    "Country": {"type": "keyword"},
+                    "Email": {"type": "object"},
+                    "WebAddr": {"type": "object"},
+                    "SupportedLanguages": {"type": "keyword"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_customer",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DisplayName": {"type": "text"},
+                    "GivenName": {"type": "text"},
+                    "FamilyName": {"type": "text"},
+                    "CompanyName": {"type": "text"},
+                    "FullyQualifiedName": {"type": "text"},
+                    "PrintOnCheckName": {"type": "text"},
+                    "Active": {"type": "boolean"},
+                    "PrimaryPhone": {"type": "object"},
+                    "PrimaryEmailAddr": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "Taxable": {"type": "boolean"},
+                    "Job": {"type": "boolean"},
+                    "BillWithParent": {"type": "boolean"},
+                    "Balance": {"type": "float"},
+                    "BalanceWithJobs": {"type": "float"},
+                    "PreferredDeliveryMethod": {"type": "keyword"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_employee",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DisplayName": {"type": "text"},
+                    "GivenName": {"type": "text"},
+                    "FamilyName": {"type": "text"},
+                    "PrintOnCheckName": {"type": "text"},
+                    "Active": {"type": "boolean"},
+                    "PrimaryPhone": {"type": "object"},
+                    "PrimaryAddr": {"type": "object"},
+                    "SSN": {"type": "keyword"},
+                    "BillableTime": {"type": "boolean"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_estimate",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TxnStatus": {"type": "keyword"},
+                    "TotalAmt": {"type": "float"},
+                    "CurrencyRef": {"type": "object"},
+                    "CustomerRef": {"type": "object"},
+                    "CustomerMemo": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "ShipAddr": {"type": "object"},
+                    "BillEmail": {"type": "object"},
+                    "ProjectRef": {"type": "object"},
+                    "PrintStatus": {"type": "keyword"},
+                    "EmailStatus": {"type": "keyword"},
+                    "Line": {"type": "object"},
+                    "ApplyTaxAfterDiscount": {"type": "boolean"},
+                    "CustomField": {"type": "object"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_invoice",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "DueDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "Balance": {"type": "float"},
+                    "PrintStatus": {"type": "keyword"},
+                    "EmailStatus": {"type": "keyword"},
+                    "ApplyTaxAfterDiscount": {"type": "boolean"},
+                    "Line": {"type": "object"},
+                    "SalesTermRef": {"type": "object"},
+                    "CustomerMemo": {"type": "object"},
+                    "ProjectRef": {"type": "object"},
+                    "Deposit": {"type": "float"},
+                    "CustomerRef": {"type": "object"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "LinkedTxn": {"type": "object"},
+                    "BillEmail": {"type": "object"},
+                    "ShipAddr": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "CustomField": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_item",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "Name": {"type": "text"},
+                    "FullyQualifiedName": {"type": "text"},
+                    "Type": {"type": "keyword"},
+                    "Active": {"type": "boolean"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_payment",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "UnappliedAmt": {"type": "float"},
+                    "DepositToAccountRef": {"type": "object"},
+                    "ProjectRef": {"type": "object"},
+                    "ProcessPayment": {"type": "boolean"},
+                    "Line": {"type": "object"},
+                    "CustomerRef": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"}, 
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_preferences",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "AccountingInfoPrefs": {"type": "object"},
+                    "ProductAndServicesPrefs": {"type": "object"},
+                    "SalesFormsPrefs": {"type": "object"},
+                    "VendorAndPurchasesPrefs": {"type": "object"},
+                    "TaxPrefs": {"type": "object"},
+                    "OtherPrefs": {"type": "object"},
+                    "TimeTrackingPrefs": {"type": "object"},
+                    "CurrencyPrefs": {"type": "object"},
+                    "EmailMessagesPrefs": {"type": "object"},
+                    "ReportPrefs": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_profit_and_loss",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Header": {"type": "object"},
+                    "Rows": {"type": "object"},
+                    "Columns": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_purchase_order",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "POStatus": {"type": "keyword"},
+                    "EmailStatus": {"type": "keyword"},
+                    "POEmail": {"type": "object"},
+                    "APAccountRef": {"type": "object"},
+                    "CurrencyRef": {"type": "object"},
+                    "ShipAddr": {"type": "object"},
+                    "VendorAddr": {"type": "object"},
+                    "VendorRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "CustomField": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_credit_memo",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "RemainingCredit": {"type": "float"},
+                    "Balance": {"type": "float"},
+                    "PrintStatus": {"type": "keyword"},
+                    "EmailStatus": {"type": "keyword"},
+                    "ApplyTaxAfterDiscount": {"type": "boolean"},
+                    "Line": {"type": "object"},
+                    "CustomerMemo": {"type": "object"},
+                    "ProjectRef": {"type": "object"},
+                    "CustomerRef": {"type": "object"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "CustomField": {"type": "object"},
+                    "ShipAddr": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "BillEmail": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_sales_receipt",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "Balance": {"type": "float"},
+                    "PrintStatus": {"type": "keyword"},
+                    "EmailStatus": {"type": "keyword"},
+                    "PaymentRefNum": {"type": "keyword"},
+                    "PaymentMethodRef": {"type": "object"},
+                    "DepositToAccountRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "ApplyTaxAfterDiscount": {"type": "boolean"},
+                    "CustomerMemo": {"type": "object"},
+                    "ProjectRef": {"type": "object"},
+                    "CustomerRef": {"type": "object"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "CustomField": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_refund_receipt",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DocNumber": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "Balance": {"type": "float"},
+                    "PrintStatus": {"type": "keyword"},
+                    "PaymentMethodRef": {"type": "object"},
+                    "DepositToAccountRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "ApplyTaxAfterDiscount": {"type": "boolean"},
+                    "CustomerMemo": {"type": "object"},
+                    "CustomerRef": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "ShipAddr": {"type": "object"},
+                    "BillEmail": {"type": "object"},
+                    "CustomField": {"type": "object"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_journal_entry",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "Line": {"type": "object"},
+                    "Adjustment": {"type": "boolean"},
+                    "TxnTaxDetail": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_vendor",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "DisplayName": {"type": "text"},
+                    "GivenName": {"type": "text"},
+                    "FamilyName": {"type": "text"},
+                    "CompanyName": {"type": "text"},
+                    "PrintOnCheckName": {"type": "text"},
+                    "Active": {"type": "boolean"},
+                    "PrimaryPhone": {"type": "object"},
+                    "PrimaryEmailAddr": {"type": "object"},
+                    "WebAddr": {"type": "object"},
+                    "BillAddr": {"type": "object"},
+                    "AcctNum": {"type": "keyword"},
+                    "Vendor1099": {"type": "boolean"},
+                    "Balance": {"type": "float"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_transfer",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "Amount": {"type": "float"},
+                    "FromAccountRef": {"type": "object"},
+                    "ToAccountRef": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_deposit",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "DepositToAccountRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_vendor_credit",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "VendorRef": {"type": "object"},
+                    "APAccountRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "quickbooks_bill_payment",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "realm_id": {"type": "keyword"},
+                    "Id": {"type": "keyword"},
+                    "TxnDate": {"type": "date"},
+                    "TotalAmt": {"type": "float"},
+                    "PayType": {"type": "keyword"},
+                    "PrivateNote": {"type": "text"},
+                    "VendorRef": {"type": "object"},
+                    "Line": {"type": "object"},
+                    "CheckPayment": {"type": "object"},
+                    "SyncToken": {"type": "keyword"},
+                    "MetaData": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }
+]

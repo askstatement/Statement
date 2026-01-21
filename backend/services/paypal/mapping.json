@@ -1,0 +1,222 @@
+[
+    {
+        "index": "paypal_invoices",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "invoice_id": {"type": "keyword"}, 
+                    "invoice_number": {"type": "keyword"},
+                    "customer_name": {"type": "keyword"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "paypal_balances",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "balance_id": {"type": "keyword"},
+                    "currency": {"type": "keyword"},
+                    "primary": {"type": "boolean"},
+                    "total_balance": {"type": "object"},
+                    "available_balance": {"type": "object"},
+                    "withheld_balance": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "paypal_user_info",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "user_id": {"type": "keyword"},
+                    "name": {"type": "text"},
+                    "emails": {"type": "object"},
+                    "address": {
+                        "type": "object",
+                        "properties": {
+                            "street_address": {"type": "text"},
+                            "locality": {"type": "keyword"},
+                            "region": {"type": "keyword"},
+                            "postal_code": {"type": "keyword"},
+                            "country": {"type": "keyword"}
+                        }
+                    },
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "paypal_subscriptions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "subscription_id": {"type": "keyword"},
+                    "status": {"type": "keyword"},
+                    "plan_id": {"type": "keyword"},
+                    "subscriber_name": {"type": "keyword"},
+                    "subscriber_email": {"type": "keyword"},
+                    "start_time": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "update_time": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    },
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    } ,{
+        "index": "paypal_payment_tokens",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "token_id": {"type": "keyword"},
+                    "payment_source": {"type": "object"},
+                    "customer": {"type": "object"}, 
+                    "status": {"type": "keyword"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }   
+    }, {
+        "index": "paypal_products",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "product_id": {"type": "keyword"},
+                    "name": {"type": "keyword"},
+                    "description": {"type": "text"},
+                    "type": {"type": "keyword"},
+                    "category": {"type": "keyword"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }   
+    }, {
+        "index": "paypal_plans",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "plan_id": {"type": "keyword"},
+                    "product_id": {"type": "keyword"},
+                    "name": {"type": "text"},
+                    "description": {"type": "text"},
+                    "status": {"type": "keyword"},
+                    "usage_type": {"type": "keyword"},
+                    "billing_cycles": {"type": "object"},
+                    "payment_preferences": {"type": "object"},
+                    "taxes": {"type": "object"},
+                    "create_time": {"type": "date"},
+                    "update_time": {"type": "date"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "paypal_transactions",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "transaction_id": {"type": "keyword"},
+                    "transaction_info": {
+                        "properties": {
+                            "paypal_account_id": {"type": "keyword"},
+                            "transaction_id": {"type": "keyword"},
+                            "transaction_event_code": {"type": "keyword"},
+                            "transaction_initiation_date": {"type": "date"},
+                            "transaction_updated_date": {"type": "date"},
+                            "transaction_amount": {
+                                "properties": {
+                                    "currency_code": {"type": "keyword"},
+                                    "value": {"type": "float"}
+                                }
+                            },
+                            "transaction_status": {"type": "keyword"},
+                            "transaction_subject": {"type": "text"},
+                            "payer_email": {"type": "keyword"},
+                            "payer_name": {"type": "text"}
+                        }
+                    },
+                    "payer_info": {"type": "object"},
+                    "shipping_info": {"type": "object"},
+                    "cart_info": {"type": "object"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }, {
+        "index": "paypal_disputes",
+        "schema": {
+            "mappings": {
+                "properties": {
+                    "project_id": {"type": "keyword"},
+                    "dispute_id": {"type": "keyword"},
+                    "reason": {"type": "keyword"},
+                    "status": {"type": "keyword"},
+                    "dispute_state": {"type": "keyword"},
+                    "dispute_life_cycle_stage": {"type": "keyword"},
+                    "dispute_channel": {"type": "keyword"},
+                    "dispute_amount": {
+                        "properties": {
+                            "currency_code": {"type": "keyword"},
+                            "value": {"type": "float"}
+                        }
+                    },
+                    "create_time": {"type": "date"},
+                    "update_time": {"type": "date"},
+                    "disputed_transaction_id": {"type": "keyword"},
+                    "data": {"type": "object"},
+                    "last_synced": {
+                        "type": "date",
+                        "format": "strict_date_optional_time||epoch_millis"
+                    }
+                }
+            }
+        }
+    }
+]
